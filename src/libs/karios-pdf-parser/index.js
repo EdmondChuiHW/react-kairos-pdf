@@ -107,31 +107,35 @@ function handleSession(sessionStr) {
 
 function tallyActivityTimes(activityTimes) {
   return activityTimes.reduce((memo, minStr) => {
-    return memo.add(moment.duration(minStr, 'minutes'));
+    return memo.add(moment.duration(Number.parseInt(minStr), 'minutes'));
   }, moment.duration(0, 'minutes'))
 }
 
 function handleRow(strings) {
   const startTime = moment(strings[0], ['h:mm', 'hh:mm'], true);
-  const declaredDuration = moment.duration(strings[1], 'minutes');
+  const declaredDuration = moment.duration(Number.parseInt(strings[1]), 'minutes');
 
-  const activityTexts = [];
   const errors = [];
+  const activityTexts = [];
+  const activityTimes = [];
 
   for (let i = 2; i < strings.length - 1; i += 1) {
     const activityText = strings[i];
-    const activityTimes = activityText.match(/\(([0-9]+) min\)/);
+    const activityTime = activityText.match(/\(([0-9]+) min\)/);
 
     activityTexts.push(activityText);
+    if (activityTime && activityTime.length) {
+      activityTimes.push(activityTime[1]);
+    }
+  }
 
-    if (activityTimes && activityTimes.length) {
-      const total = tallyActivityTimes(activityTimes);
+  if (activityTimes && activityTimes.length) {
+    const total = tallyActivityTimes(activityTimes);
 
-      if (total.asMilliseconds() !== declaredDuration.asMilliseconds()) {
-        errors.push(
-          ParsingErrors.ofMismatchedDurations(`${declaredDuration} | ${activityText}`, declaredDuration, total),
-        );
-      }
+    if (total.asMilliseconds() !== declaredDuration.asMilliseconds()) {
+      errors.push(
+        ParsingErrors.ofMismatchedDurations(`${declaredDuration} | ${activityTexts}`, declaredDuration, total),
+      );
     }
   }
   const facilitator = strings[strings.length - 1];

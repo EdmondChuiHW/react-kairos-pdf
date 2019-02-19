@@ -1,3 +1,17 @@
 {
-  "title": "Welcome to React and react-i18next"
+  "title": "Kairos Run Sheet Helper",
+  "supportedLanguages": [
+    {
+      "code": "en",
+      "display": "🇨🇦English"
+    },
+    {
+      "code": "zh-hk",
+      "display": "🇭🇰Chinese (Traditional)"
+    },
+    {
+      "code": "zh-cn",
+      "display": "🇨🇳Chinese (Simplified)"
+    }
+  ]
 }

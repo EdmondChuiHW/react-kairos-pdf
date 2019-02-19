@@ -13,5 +13,7 @@
       "code": "zh-cn",
       "display": "🇨🇳Chinese (Simplified)"
     }
-  ]
+  ],
+  "uploadFilePrompt": "Click here to select the run sheet file. You can also drag and drop.",
+  "uploadFileFailed": "The file must be in Kairos PDF format. Please try again."
 }

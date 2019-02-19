@@ -1,0 +1,19 @@
+.pdf-file-picker {
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  display: flex;
+}
+
+.pdf-file-picker .drop-zone {
+  flex: 1;
+}
+
+.pdf-file-picker .loading-container {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

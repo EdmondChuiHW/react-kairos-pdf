@@ -12,9 +12,6 @@ import LanguageIcon from '@material-ui/icons/Language';
 import {useTranslation} from "react-i18next";
 
 const styles = {
-  root: {
-    flexGrow: 1,
-  },
   grow: {
     flexGrow: 1,
   },
@@ -44,7 +41,7 @@ function ButtonAppBar(props) {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.grow}>

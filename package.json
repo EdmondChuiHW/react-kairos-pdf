@@ -10,11 +10,17 @@
     "i18next": "^15.0.4",
     "i18next-browser-languagedetector": "^3.0.1",
     "i18next-xhr-backend": "^2.0.1",
+    "lodash-es": "^4.17.11",
     "material-ui-dropzone": "^2.3.2",
+    "moment": "^2.24.0",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^2.0.943",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-i18next": "^10.1.2",
-    "react-scripts": "2.1.5"
+    "react-pdf-js": "^4.0.2",
+    "react-scripts": "2.1.5",
+    "rxjs": "^6.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -22,7 +28,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "postinstall": "cp node_modules/pdfjs-dist/build/pdf.worker.min.js public/pdf.worker.min.js"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {DropzoneArea} from "material-ui-dropzone";
-import {readFileAsArrayBuffer} from "../Utils";
+import {readFileAsArrayBuffer} from "../../Utils";
 import {useTranslation} from "react-i18next";
 import Snackbar from "@material-ui/core/es/Snackbar";
 import {finalize, switchMap} from "rxjs/operators";
 import CircularProgress from "@material-ui/core/es/CircularProgress";
 import "./PdfFilePicker.css";
-import {readBufferToPages} from "../libs/karios-pdf-parser";
+import {readBufferToPages} from "../../libs/karios-pdf-parser";
 
 export function PdfFilePicker() {
   const {t} = useTranslation();
@@ -24,7 +24,7 @@ export function PdfFilePicker() {
         finalize(() => setIsLoading(false)),
       )
       .subscribe(pages => {
-        console.log('pages', pages);
+        console.log('pages', pages.raw);
 
       }, error => {
         console.error(error);

@@ -14,11 +14,11 @@ function makeItem(result, errors, discarded) {
   };
 }
 
-function isStrStartTime(str) {
+export function isStrStartTime(str) {
   return str.length >= 4 && moment(str, ['h:mm', 'hh:mm'], true).isValid();
 }
 
-function handlePage(textContent) {
+export function handlePage(textContent) {
   let session = null;
 
   const rows = [];
@@ -91,7 +91,7 @@ function handlePage(textContent) {
   );
 }
 
-function handleSession(sessionStr) {
+export function handleSession(sessionStr) {
   const regExp = /Session ([0-9]+) - (.*)/;
   const match = sessionStr.match(regExp);
   if (!match.length) {
@@ -105,13 +105,13 @@ function handleSession(sessionStr) {
   });
 }
 
-function tallyActivityTimes(activityTimes) {
+export function tallyActivityTimes(activityTimes) {
   return activityTimes.reduce((memo, minStr) => {
     return memo.add(moment.duration(Number.parseInt(minStr), 'minutes'));
   }, moment.duration(0, 'minutes'))
 }
 
-function handleRow(strings) {
+export function handleRow(strings) {
   const startTime = moment(strings[0], ['h:mm', 'hh:mm'], true);
   const declaredDuration = moment.duration(Number.parseInt(strings[1]), 'minutes');
 

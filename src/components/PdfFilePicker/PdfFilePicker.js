@@ -8,7 +8,8 @@ import CircularProgress from "@material-ui/core/es/CircularProgress";
 import "./PdfFilePicker.css";
 import {readBufferToPages} from "../../libs/karios-pdf-parser";
 
-export function PdfFilePicker() {
+export function PdfFilePicker(props) {
+  const {onPagesLoaded} = props;
   const {t} = useTranslation();
   const [snackBarMessage, setSnackBarMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +26,7 @@ export function PdfFilePicker() {
       )
       .subscribe(pages => {
         console.log('pages', pages.raw);
+        onPagesLoaded && onPagesLoaded(pages.raw);
 
       }, error => {
         console.error(error);

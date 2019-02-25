@@ -1,0 +1,17 @@
+.table-by-names {
+}
+
+.table-by-names table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid;
+}
+
+.table-by-names td {
+  border: 1px solid;
+}
+
+.table-by-names th {
+  border: 1px solid;
+  text-align: left;
+}

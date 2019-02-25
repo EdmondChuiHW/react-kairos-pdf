@@ -2,7 +2,7 @@ import pdf from "./pdf-parse";
 
 import moment from "moment";
 import {from} from "rxjs";
-import {last} from "lodash-es";
+import {keys, last} from "lodash-es";
 import {ParsingErrors} from "./errors";
 
 function makeItem(result, errors, discarded) {
@@ -35,6 +35,15 @@ export function handlePage(textContent) {
     session: [],
     rows: [],
   };
+  const facilitatorToRows = {};
+  const allFacilitatorsRows = [];
+
+
+  const pushIndexToAllExistingFacilitators = (index) => {
+    keys(facilitatorToRows).forEach(name => {
+      facilitatorToRows[name].push(index);
+    });
+  };
 
   let lastRowPositionY = null;
 
@@ -54,6 +63,15 @@ export function handlePage(textContent) {
         if (pendingRowInput && pendingRowInput.length) {
           const r = handleRow(pendingRowInput);
           rows[currentRowIndex] = r.result;
+          if (r.result.facilitator && r.result.facilitator.toLocaleLowerCase() === 'all') {
+            allFacilitatorsRows.push(currentRowIndex);
+            pushIndexToAllExistingFacilitators(currentRowIndex);
+          } else {
+            if (!facilitatorToRows[r.result.facilitator]) {
+              facilitatorToRows[r.result.facilitator] = allFacilitatorsRows.slice();
+            }
+            facilitatorToRows[r.result.facilitator].push(currentRowIndex);
+          }
           if (r.meta.discarded && r.meta.discarded.length) {
             discarded.rows[currentRowIndex] = r.meta.discarded;
           }
@@ -86,6 +104,7 @@ export function handlePage(textContent) {
   return makeItem({
       session,
       rows,
+      facilitatorToRows,
     },
     errors,
     discarded

@@ -2,6 +2,7 @@ import pdf from "./pdf-parse";
 
 import moment from "moment";
 import {from} from "rxjs";
+import {last} from "lodash-es";
 import {ParsingErrors} from "./errors";
 
 function makeItem(result, errors, discarded) {
@@ -92,17 +93,19 @@ export function handlePage(textContent) {
 }
 
 export function handleSession(sessionStr) {
-  const regExp = /Session ([0-9]+) - (.*)/;
-  const match = sessionStr.match(regExp);
-  if (!match.length) {
-    return makeItem(null, [
-      ParsingErrors.ofInvalidSession(sessionStr),
-    ]);
-  }
+  const sessionRegExp = /Session ([0-9]+)/;
+  const dateRegExp = /- (.*)/;
+  const sessionMatch = sessionStr.match(sessionRegExp);
+  const dateMatch = sessionStr.match(dateRegExp);
+
+  const date = moment(dateMatch && dateMatch[1], 'dddd, DD MMMM, YYYY');
+  const errors = (!sessionMatch || !date.isValid())
+    ? [ParsingErrors.ofInvalidSession(sessionStr)]
+    : [];
   return makeItem({
-    sessionNumber: Number.parseInt(match[1]),
-    date: moment(match[2], 'dddd, DD MMMM, YYYY'),
-  });
+    sessionNumber: Number.parseInt(sessionMatch && sessionMatch[1]),
+    date: date,
+  }, errors);
 }
 
 export function tallyActivityTimes(activityTimes) {
@@ -112,7 +115,7 @@ export function tallyActivityTimes(activityTimes) {
 }
 
 export function handleRow(strings) {
-  const startTime = moment(strings[0], ['h:mm', 'hh:mm'], true);
+  const startTime = moment(strings[0], ['h:mm', 'hh:mm']);
   const declaredDuration = moment.duration(Number.parseInt(strings[1]), 'minutes');
 
   const errors = [];
@@ -134,11 +137,11 @@ export function handleRow(strings) {
 
     if (total.asMilliseconds() !== declaredDuration.asMilliseconds()) {
       errors.push(
-        ParsingErrors.ofMismatchedDurations(`${declaredDuration} | ${activityTexts}`, declaredDuration, total),
+        ParsingErrors.ofMismatchedDurations(`${declaredDuration.asMinutes()} | ${activityTexts}`, declaredDuration, total),
       );
     }
   }
-  const facilitator = strings[strings.length - 1];
+  const facilitator = last(strings);
 
   return makeItem({
     startTime,

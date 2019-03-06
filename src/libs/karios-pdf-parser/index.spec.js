@@ -1,4 +1,4 @@
-import {handleRow, handleSession, tallyActivityTimes} from "./index";
+import {handleRow, handleSession, isStrStartTime, tallyActivityTimes} from "./index";
 import moment from 'moment';
 import {ParsingErrors} from "./errors";
 
@@ -8,6 +8,16 @@ describe('karios-pdf-parser', function () {
     it('should return moment with sum', () => {
       const actual = tallyActivityTimes([5, 12, 8]);
       expect(actual.asMilliseconds()).toEqual(moment.duration(25, 'minutes').asMilliseconds());
+    });
+  });
+
+  describe('isStrStartTime(…)', function () {
+    it('should return start time valid', () => {
+      expect(isStrStartTime('8:00')).toEqual(true);
+      expect(isStrStartTime('16:00')).toEqual(true);
+      expect(isStrStartTime('a:00')).toEqual(false);
+      expect(isStrStartTime('800')).toEqual(false);
+      expect(isStrStartTime('29:00')).toEqual(false);
     });
   });
 

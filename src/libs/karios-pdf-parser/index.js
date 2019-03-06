@@ -4,6 +4,7 @@ import moment from "moment";
 import {from} from "rxjs";
 import {keys, last} from "lodash-es";
 import {ParsingErrors} from "./errors";
+import * as R from "ramda";
 
 function makeItem(result, errors, discarded) {
   return {
@@ -15,9 +16,15 @@ function makeItem(result, errors, discarded) {
   };
 }
 
-export function isStrStartTime(str) {
-  return str.length >= 4 && moment(str, ['h:mm', 'hh:mm'], true).isValid();
-}
+export const isStrStartTime = R.allPass([
+  R.pipe(R.length, R.gte(R.__, 4)),
+  R.pipe(
+    s => moment(s, ['H:mm', 'HH:mm'], true),
+    R.invoker(0, 'isValid'),
+  ),
+]);
+
+// return str.length >= 4 && moment(str, ['H:mm', 'HH:mm'], true).isValid();
 
 export function handlePage(textContent) {
   let session = null;

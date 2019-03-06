@@ -15,6 +15,7 @@
     "moment": "^2.24.0",
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^2.0.943",
+    "ramda": "^0.26.1",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-i18next": "^10.1.2",

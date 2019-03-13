@@ -2,27 +2,28 @@ import pdf from "./pdf-parse";
 
 import moment from "moment";
 import {from} from "rxjs";
-import {keys, last} from "lodash-es";
+import {keys} from "lodash-es";
 import {ParsingErrors} from "./errors";
-import * as R from "ramda";
+import {
+  always,
+  compose,
+  curry,
+  filter,
+  flip,
+  gt,
+  ifElse,
+  invoker,
+  isEmpty,
+  last,
+  lensIndex,
+  map,
+  match,
+  pipe,
+  transduce,
+  view,
+} from "ramda";
 
-function makeItem(result, errors, discarded) {
-  return {
-    result: result,
-    meta: {
-      discarded: discarded || [],
-      errors: errors || [],
-    },
-  };
-}
-
-export const isStrStartTime = R.allPass([
-  R.pipe(R.length, R.gte(R.__, 4)),
-  R.pipe(
-    s => moment(s, ['H:mm', 'HH:mm'], true),
-    R.invoker(0, 'isValid'),
-  ),
-]);
+export const isStrStartTime = str => str.length >= 4 && moment(str, ['h:mm', 'hh:mm'], true).isValid();
 
 // return str.length >= 4 && moment(str, ['H:mm', 'HH:mm'], true).isValid();
 
@@ -108,14 +109,13 @@ export function handlePage(textContent) {
 
     allTextsIndex += 1;
   }
-  return makeItem({
-      session,
-      rows,
-      facilitatorToRows,
-    },
+  return {
+    session,
+    rows,
+    facilitatorToRows,
     errors,
-    discarded
-  );
+    discarded,
+  };
 }
 
 export function handleSession(sessionStr) {
@@ -128,10 +128,11 @@ export function handleSession(sessionStr) {
   const errors = (!sessionMatch || !date.isValid())
     ? [ParsingErrors.ofInvalidSession(sessionStr)]
     : [];
-  return makeItem({
+  return {
     sessionNumber: Number.parseInt(sessionMatch && sessionMatch[1]),
     date: date,
-  }, errors);
+    errors,
+  };
 }
 
 export function tallyActivityTimes(activityTimes) {
@@ -140,7 +141,54 @@ export function tallyActivityTimes(activityTimes) {
   }, moment.duration(0, 'minutes'))
 }
 
+export function stringsToTimeTotal(strings) {
+  const regexMatcher = match(/\(([0-9]+) mins?\)/);
+  const regexFirstMatchLens = lensIndex(1);
+
+  const strToMinuteNum = pipe(
+    regexMatcher,
+    ifElse(
+      isEmpty,
+      always('0'),
+      view(regexFirstMatchLens),
+    ),
+    Number.parseInt,
+  );
+
+  const mapToDuration = i => moment.duration(i, 'minutes');
+  const zeroDuration = mapToDuration(0);
+
+  const accFn = invoker(1, 'add');  // moment.add(value)
+  const filterFn = flip(gt)(0);  // or gt(__, 0)
+  const transduceFn = compose(
+    map(strToMinuteNum),
+    filter(filterFn),
+    map(mapToDuration),
+  );
+
+  return transduce(transduceFn, accFn, zeroDuration, strings);
+}
+
 export function handleRow(strings) {
+  const makeRow = curry((startTime, declaredDuration, activityTexts, facilitator, errors) => ({
+    startTime,
+    declaredDuration,
+    activityTexts,
+    facilitator,
+    errors,
+  }));
+
+  pipe(
+
+  );
+
+  const startTimeFromStr = s => moment(s, ['h:mm', 'hh:mm']);
+  const declaredDurationFromInt = i => moment.duration(i, 'minutes');
+  const declaredDurationFromStr = pipe(Number.parseInt, declaredDurationFromInt);
+  const getFacilitatorStr = last;
+
+  makeRow(startTimeFromStr(strings[0]))(declaredDurationFromStr(strings[1]));
+
   const startTime = moment(strings[0], ['h:mm', 'hh:mm']);
   const declaredDuration = moment.duration(Number.parseInt(strings[1]), 'minutes');
 
@@ -148,6 +196,7 @@ export function handleRow(strings) {
   const activityTexts = [];
   const activityTimes = [];
 
+  // user stringsToTimeTotal(…)
   for (let i = 2; i < strings.length - 1; i += 1) {
     const activityText = strings[i];
     const activityTime = activityText.match(/\(([0-9]+) min\)/);
@@ -169,19 +218,20 @@ export function handleRow(strings) {
   }
   const facilitator = last(strings);
 
-  return makeItem({
+  return {
     startTime,
     declaredDuration,
     activityTexts,
     facilitator,
-  }, errors);
+    errors,
+  };
 }
 
 export function readBufferToPages(buffer) {
   function renderPage(pageData) {
     const renderOptions = {
       normalizeWhitespace: true,
-      disableCombineTextItems: true
+      disableCombineTextItems: true,
     };
 
     return pageData
@@ -190,7 +240,7 @@ export function readBufferToPages(buffer) {
   }
 
   const options = {
-    pagerender: renderPage
+    pagerender: renderPage,
   };
 
   return from(pdf(buffer, options));

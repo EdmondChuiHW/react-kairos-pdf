@@ -1,4 +1,4 @@
-import {handleRow, handleSession, isStrStartTime, tallyActivityTimes} from "./index";
+import {handleRow, handleSession, isStrStartTime, stringsToTimeTotal, tallyActivityTimes} from "./index";
 import moment from 'moment';
 import {ParsingErrors} from "./errors";
 
@@ -18,6 +18,24 @@ describe('karios-pdf-parser', function () {
       expect(isStrStartTime('a:00')).toEqual(false);
       expect(isStrStartTime('800')).toEqual(false);
       expect(isStrStartTime('29:00')).toEqual(false);
+    });
+  });
+
+  describe('stringsToTimeTotal(…)', function () {
+    it('should tally as zero if none found', () => {
+      expect(stringsToTimeTotal(['aewfe', 'aafe']).asMilliseconds()).toEqual(0);
+    });
+
+    it('should tally partial', () => {
+      expect(stringsToTimeTotal(['aewfe', 'a (2 min)']).asMilliseconds()).toEqual(2 * 60 * 1000);
+    });
+
+    it('should tally all', () => {
+      expect(stringsToTimeTotal(['aewfe (3 min)', 'eqf (2 min)']).asMilliseconds()).toEqual(5 * 60 * 1000);
+    });
+
+    it('should tally all with s', () => {
+      expect(stringsToTimeTotal(['aewfe (3 mins)', 'eqf (2 min)']).asMilliseconds()).toEqual(5 * 60 * 1000);
     });
   });
 

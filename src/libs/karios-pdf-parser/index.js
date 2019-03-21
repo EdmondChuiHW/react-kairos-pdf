@@ -7,14 +7,12 @@ import {ParsingErrors} from "./errors";
 import {
   always,
   compose,
-  curry,
   filter,
   flip,
   gt,
   ifElse,
   invoker,
   isEmpty,
-  last,
   lensIndex,
   map,
   match,
@@ -22,10 +20,10 @@ import {
   transduce,
   view,
 } from "ramda";
+import {acceptedTimeFormats} from "./consts";
+import {handleRow} from "./handle-row";
 
-export const isStrStartTime = str => str.length >= 4 && moment(str, ['h:mm', 'hh:mm'], true).isValid();
-
-// return str.length >= 4 && moment(str, ['H:mm', 'HH:mm'], true).isValid();
+export const isStrStartTime = str => str.length >= 4 && moment(str, acceptedTimeFormats, true).isValid();
 
 export function handlePage(textContent) {
   let session = null;
@@ -167,64 +165,6 @@ export function stringsToTimeTotal(strings) {
   );
 
   return transduce(transduceFn, accFn, zeroDuration, strings);
-}
-
-export function handleRow(strings) {
-  const makeRow = curry((startTime, declaredDuration, activityTexts, facilitator, errors) => ({
-    startTime,
-    declaredDuration,
-    activityTexts,
-    facilitator,
-    errors,
-  }));
-
-  pipe(
-
-  );
-
-  const startTimeFromStr = s => moment(s, ['h:mm', 'hh:mm']);
-  const declaredDurationFromInt = i => moment.duration(i, 'minutes');
-  const declaredDurationFromStr = pipe(Number.parseInt, declaredDurationFromInt);
-  const getFacilitatorStr = last;
-
-  makeRow(startTimeFromStr(strings[0]))(declaredDurationFromStr(strings[1]));
-
-  const startTime = moment(strings[0], ['h:mm', 'hh:mm']);
-  const declaredDuration = moment.duration(Number.parseInt(strings[1]), 'minutes');
-
-  const errors = [];
-  const activityTexts = [];
-  const activityTimes = [];
-
-  // user stringsToTimeTotal(…)
-  for (let i = 2; i < strings.length - 1; i += 1) {
-    const activityText = strings[i];
-    const activityTime = activityText.match(/\(([0-9]+) min\)/);
-
-    activityTexts.push(activityText);
-    if (activityTime && activityTime.length) {
-      activityTimes.push(activityTime[1]);
-    }
-  }
-
-  if (activityTimes && activityTimes.length) {
-    const total = tallyActivityTimes(activityTimes);
-
-    if (total.asMilliseconds() !== declaredDuration.asMilliseconds()) {
-      errors.push(
-        ParsingErrors.ofMismatchedDurations(`${declaredDuration.asMinutes()} | ${activityTexts}`, declaredDuration, total),
-      );
-    }
-  }
-  const facilitator = last(strings);
-
-  return {
-    startTime,
-    declaredDuration,
-    activityTexts,
-    facilitator,
-    errors,
-  };
 }
 
 export function readBufferToPages(buffer) {

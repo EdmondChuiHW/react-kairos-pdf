@@ -1,8 +1,8 @@
-import {stringsToTimeTotal} from "./index";
-import {ParsingErrors} from "./errors";
+import {ParsingErrors} from "../errors";
 import {always, apply, converge, dec, identity, ifElse, juxt, last, length, lensIndex, pipe, slice, view} from "ramda";
 import moment from "moment";
-import {acceptedTimeFormats} from "./consts";
+import {acceptedTimeFormats} from "../consts";
+import {stringsToTimeTotal} from "../strings-to-time-total/strings-to-time-total";
 
 const makeRow = (startTime, declaredDuration, activityTexts, facilitator, errors) => ({
   startTime,

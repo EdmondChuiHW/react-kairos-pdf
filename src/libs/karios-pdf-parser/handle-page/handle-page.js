@@ -108,18 +108,15 @@ function oldHandlePage(handleSession, textContent) {
   };
 }
 
-const makePage = ({sessions, facilitatorToRows, discarded}) => ({
+const makePage = ({sessions, rows, facilitatorToRows, discarded}) => ({
   sessions,
+  rows,
   facilitatorToRows,
   discarded,
 });
 
 const handlePage = (handleSession, textContent) => {
-  return {
-    sessions,
-    facilitatorToRows,
-    discarded,
-  };
+
 };
 
 export const makeHandlePage = curry(handlePage);

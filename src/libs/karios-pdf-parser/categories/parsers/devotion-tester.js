@@ -1,20 +1,5 @@
-import {
-  always,
-  any,
-  complement,
-  either,
-  findLast,
-  isEmpty,
-  isNil,
-  match,
-  pipe,
-  reduce,
-  test,
-  unless,
-  when,
-} from "ramda";
-
-const isNilOrEmpty = either(isNil, isEmpty);
+import {always, any, complement, findLast, match, pipe, reduce, test, unless, when} from "ramda";
+import {isNilOrEmpty} from "../../utils";
 
 const throwError = msg => () => {
   throw new Error(msg);
@@ -23,10 +8,10 @@ const throwError = msg => () => {
 const normalize = s => s.replace(/[\s'"]+/g, '');
 const makeDevotion = (topic) => ({category: 'devotion', topic});
 
-export const devotionTester = any(test(/(?:devotion\s+.+)|(?:.+\s+devotion)$/i));
-const devotionTopicMatcher = match(/(?:\(changed?\sto\)\s?)?(?:(?:devotion\s+(.+))|(?:(?:\)\s)?(.+)\s+devotion$))/i);
+export const devotionTester = any(test(/(?:^devotion\s+.+)|(?:.+\s+devotion)$/i));
+const devotionTopicMatcher = match(/(?:\(changed?\sto\)\s+)?(?:(?:devotion\s+(.+))|(?:(?:\)\s+)?(.+)\s+devotion$))/i);
 
-const reducer = (acc, curr) => pipe(
+const topicReducer = (acc, curr) => pipe(
   devotionTopicMatcher,
   findLast(complement(isNilOrEmpty)),
   when(isNilOrEmpty, always(acc)),
@@ -34,8 +19,8 @@ const reducer = (acc, curr) => pipe(
 
 export const devotionParser = pipe(
   unless(devotionTester, throwError('Not devotion strings')),
-  reduce(reducer, ''),
-  when(isNilOrEmpty, always('[Unknown topic]')),
+  reduce(topicReducer, ''),
   normalize,
+  when(isNilOrEmpty, always('[Unknown topic]')),
   makeDevotion,
 );

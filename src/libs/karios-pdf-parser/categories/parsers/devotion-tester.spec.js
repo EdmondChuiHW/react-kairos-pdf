@@ -1,6 +1,6 @@
 import {devotionParser, devotionTester} from "./devotion-tester";
 
-describe('devotionTester', () => {
+describe('focusPrayerTester', () => {
   it('should return true for matches', () => {
     expect(devotionTester([`"Power" devotion`])).toEqual(true);
     expect(devotionTester([`Devotion "Power"`])).toEqual(true);
@@ -17,7 +17,7 @@ describe('devotionTester', () => {
   });
 });
 
-describe('devotionParser', () => {
+describe('focusPrayerParser', () => {
   it('should return deovtion object for matches', () => {
     expect(devotionParser(['"Power" devotion']).topic).toEqual('Power');
     expect(devotionParser(['"Power" devotion']).category).toEqual('devotion');
@@ -29,6 +29,11 @@ describe('devotionParser', () => {
   it('should return changed topic', () => {
     expect(devotionParser([`"Power" devotion`, `(changed to) "Dam" devotion`]).topic).toEqual('Dam');
     expect(devotionParser([`Devotion "Power"`, `(changed to) devotion "Dam"`]).topic).toEqual('Dam');
+  });
+
+  it('should return [Unknown topic] for missing topic', () => {
+    expect(devotionParser([`"" devotion`]).topic).toEqual('[Unknown topic]');
+    expect(devotionParser([`Devotion ""`]).topic).toEqual('[Unknown topic]');
   });
 
   it('should throw for non-matches', () => {

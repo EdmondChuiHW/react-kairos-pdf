@@ -1,4 +1,5 @@
 import {devotionParser, devotionTester} from "./devotion-tester";
+import {devotion} from "../category-types";
 
 describe('devotionTester', () => {
   it('should return true for matches', () => {
@@ -20,13 +21,13 @@ describe('devotionTester', () => {
 describe('devotionParser', () => {
   it('should return devotion object for matches', () => {
     expect(devotionParser(['"Power" devotion']).topic).toEqual('Power');
-    expect(devotionParser(['"Power" devotion']).category).toEqual('devotion');
+    expect(devotionParser(['"Power" devotion']).category).toEqual(devotion);
 
     expect(devotionParser(['Devotion "Power"']).topic).toEqual('Power');
-    expect(devotionParser(['Devotion "Power"']).category).toEqual('devotion');
+    expect(devotionParser(['Devotion "Power"']).category).toEqual(devotion);
 
     expect(devotionParser(['Devotion - Biblical Worldview']).topic).toEqual('Biblical Worldview');
-    expect(devotionParser(['Devotion - Biblical Worldview']).category).toEqual('devotion');
+    expect(devotionParser(['Devotion - Biblical Worldview']).category).toEqual(devotion);
   });
 
   it('should return changed topic', () => {

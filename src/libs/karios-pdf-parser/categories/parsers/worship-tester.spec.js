@@ -1,4 +1,5 @@
 import {worshipParser, worshipTester} from "./worship-tester";
+import {worship} from "../category-types";
 
 describe('worshipTester', () => {
   it('should return true for matches', () => {
@@ -19,15 +20,15 @@ describe('worshipTester', () => {
 describe('worshipParser', () => {
   it('should return worship object for matches', () => {
     expect(worshipParser(['Worship & Prayer', 'FT Team']).assignedGroup).toEqual('FT Team');
-    expect(worshipParser(['Worship & Prayer', 'FT Team']).category).toEqual('worship');
+    expect(worshipParser(['Worship & Prayer', 'FT Team']).category).toEqual(worship);
 
     expect(worshipParser(['Worship & Prayer', 'GPG 2']).assignedGroup).toEqual('GPG 2');
-    expect(worshipParser(['Worship & Prayer', 'GPG 2']).category).toEqual('worship');
+    expect(worshipParser(['Worship & Prayer', 'GPG 2']).category).toEqual(worship);
   });
 
   it('should return empty string for missing assigned groups', () => {
     expect(worshipParser(['Worship & Prayer']).assignedGroup).toEqual('');
-    expect(worshipParser(['Worship & Prayer']).category).toEqual('worship');
+    expect(worshipParser(['Worship & Prayer']).category).toEqual(worship);
   });
 
   it('should throw for non-matches', () => {

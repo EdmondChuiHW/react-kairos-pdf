@@ -1,7 +1,8 @@
 import {always, any, complement, findLast, match, pipe, reduce, test, unless, when} from "ramda";
 import {isNilOrEmpty, stripAllQuotes, throwErrorWithMessage} from "../../utils";
+import {video} from "../category-types";
 
-const makeVideo = (title) => ({category: 'video', title});
+const makeVideo = (title) => ({category: video, title});
 
 const removeTrailingParenthesisAndContents = s => s.replace(/\s*\(.*\)\s*$/, '');
 

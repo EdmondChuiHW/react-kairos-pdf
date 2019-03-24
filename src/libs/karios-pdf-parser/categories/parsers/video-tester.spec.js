@@ -1,4 +1,5 @@
 import {videoParser, videoTester} from "./video-tester";
+import {video} from "../category-types";
 
 describe('videoTester', () => {
   it('should return true for matches', () => {
@@ -20,10 +21,10 @@ describe('videoTester', () => {
 describe('videoParser', () => {
   it('should return video object for matches', () => {
     expect(videoParser([`Video "The Ends of the Earth" (20 min)`]).title).toEqual('The Ends of the Earth');
-    expect(videoParser([`Video "The Ends of the Earth" (20 min)`]).category).toEqual('video');
+    expect(videoParser([`Video "The Ends of the Earth" (20 min)`]).category).toEqual(video);
 
     expect(videoParser(['Video - Biblical Worldview']).title).toEqual('Biblical Worldview');
-    expect(videoParser(['Video - Biblical Worldview']).category).toEqual('video');
+    expect(videoParser(['Video - Biblical Worldview']).category).toEqual(video);
   });
 
   it('should return changed topic', () => {

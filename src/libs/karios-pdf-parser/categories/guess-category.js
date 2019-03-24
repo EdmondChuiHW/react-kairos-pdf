@@ -5,6 +5,7 @@ import {focusPrayerParser, focusPrayerTester} from "./parsers/focus-prayer-teste
 import {chapterReviewParser, chapterReviewTester} from "./parsers/chapter-review-tester";
 import {chapterIntroParser, chapterIntroTester} from "./parsers/chapter-intro-tester";
 import {videoParser, videoTester} from "./parsers/video-tester";
+import {unknown} from "./category-types";
 
 export const guessCategoryFromRawStrings = cond([
   [worshipTester, worshipParser],
@@ -13,5 +14,5 @@ export const guessCategoryFromRawStrings = cond([
   [chapterReviewTester, chapterReviewParser],
   [chapterIntroTester, chapterIntroParser],
   [videoTester, videoParser],
-  [T, always({category: 'unknown'})],
+  [T, always({category: unknown})],
 ]);

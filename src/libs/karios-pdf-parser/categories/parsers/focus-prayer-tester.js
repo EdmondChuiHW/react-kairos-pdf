@@ -1,7 +1,8 @@
 import {always, any, complement, converge, find, findLast, match, pipe, reduce, test, unless, when} from "ramda";
 import {isNilOrEmpty, startsWithGpgOrFt, throwErrorWithMessage} from "../../utils";
+import {focusPrayer} from "../category-types";
 
-const makeFocusPrayer = (assignedGroup, prayerTarget) => ({category: 'focus-prayer', assignedGroup, prayerTarget});
+const makeFocusPrayer = (assignedGroup, prayerTarget) => ({category: focusPrayer, assignedGroup, prayerTarget});
 
 export const focusPrayerTester = any(test(/^lrp prayer\s+focus/i));
 const focusPrayerMatcher = match(/^lrp prayer\s+focus\s+-+\s+(.*)/i);

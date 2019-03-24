@@ -1,7 +1,8 @@
 import {always, any, find, isNil, pipe, test, unless, when} from "ramda";
 import {startsWithGpgOrFt, throwErrorWithMessage} from "../../utils";
+import {worship} from "../category-types";
 
-const makeWorship = (assignedGroup) => ({category: 'worship', assignedGroup});
+const makeWorship = (assignedGroup) => ({category: worship, assignedGroup});
 
 export const worshipTester = any(test(/^worship/i));
 

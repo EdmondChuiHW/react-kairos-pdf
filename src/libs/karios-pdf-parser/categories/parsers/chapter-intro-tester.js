@@ -16,8 +16,9 @@ import {
   when,
 } from "ramda";
 import {isNilOrEmpty, stripAllQuotes, throwErrorWithMessage} from "../../utils";
+import {chapterIntro} from "../category-types";
 
-const makeChapter = (number, topic) => ({category: 'chapter-intro', number, topic});
+const makeChapter = (number, topic) => ({category: chapterIntro, number, topic});
 
 export const chapterIntroTester = any(test(/(?:^chapter\s*\d*\s*.+\s*introduction$)|(?:^introduction\s*to\s*chapter\s*\d*\s*.*\s*)/i));
 const chapterIntroMatcher = match(/(?:^chapter\s*(\d*)\s*(.+)\s*introduction$)|(?:^introduction\s*to\s*chapter\s*(\d*)\s*(.*)\s*)/i);

@@ -3,13 +3,13 @@ import {DropzoneArea} from "material-ui-dropzone";
 import {readFileAsArrayBuffer} from "../../Utils";
 import {useTranslation} from "react-i18next";
 import Snackbar from "@material-ui/core/es/Snackbar";
-import {finalize, switchMap} from "rxjs/operators";
+import {finalize, map, switchMap, tap} from "rxjs/operators";
 import CircularProgress from "@material-ui/core/es/CircularProgress";
 import "./PdfFilePicker.css";
 import {readBufferToPages} from "../../libs/karios-pdf-parser";
 
 export function PdfFilePicker(props) {
-  const {onPagesLoaded} = props;
+  const {onResultLoaded} = props;
   const {t} = useTranslation();
   const [snackBarMessage, setSnackBarMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -22,11 +22,17 @@ export function PdfFilePicker(props) {
     const sub = readFileAsArrayBuffer(file)
       .pipe(
         switchMap(readBufferToPages),
+        tap(pages => console.log('pages', pages.raw)),
+        map(pages => pages.raw.reduce((acc, cur) => ({
+            sessions: acc.sessions.concat(cur.sessions),
+            rows: acc.rows.concat(cur.rows),
+          }), {sessions: [], rows: []},
+        )),
         finalize(() => setIsLoading(false)),
       )
-      .subscribe(pages => {
-        console.log('pages', pages.raw);
-        onPagesLoaded && onPagesLoaded(pages.raw);
+      .subscribe(result => {
+        console.log('transformed', result);
+        onResultLoaded && onResultLoaded(result);
 
       }, error => {
         console.error(error);

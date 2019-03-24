@@ -15,7 +15,7 @@ const makeRow = (startTime, declaredDuration, activityTexts, facilitator, errors
 });
 
 const startTimeFromStr = s => moment(s, acceptedTimeFormats);
-const isDurationsSame = (a, b) => a.asMilliseconds() === b.asMilliseconds();
+const areDurationsAccepted = (declared, tallied) => tallied.asMilliseconds() === 0 || declared.asMilliseconds() === tallied.asMilliseconds();
 const makeMismatchedDurationsError = (declared, total, activityTexts) => ParsingErrors.ofMismatchedDurations(`${declared.asMinutes()} | ${activityTexts}`, declared, total);
 
 const getDeclaredDurationFromInt = i => moment.duration(i, 'minutes');
@@ -49,7 +49,7 @@ const getDeclaredAndActualTimesAndActivityText = juxt([
 const getErrors = pipe(
   getDeclaredAndActualTimesAndActivityText,
   ifElse(
-    apply(isDurationsSame),
+    apply(areDurationsAccepted),
     always([]),
     juxt([apply(makeMismatchedDurationsError)]),
   ),

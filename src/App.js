@@ -5,38 +5,36 @@ import ButtonAppBar from "./components/ButtonAppBar/ButtonAppBar";
 import {PdfFilePicker} from "./components/PdfFilePicker/PdfFilePicker";
 import {Loading} from "./components/Loading/Loading";
 import {RawPage} from "./components/RawPage/RawPage";
-import {TableByNames} from "./components/TableByNames/TableByNames";
+import {filter, propEq} from "ramda";
 
 export function App() {
-  const [pages, setPages] = useState(null);
+  const [result, setResult] = useState(null);
   //pages
   // (9) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
   //
   //   0:
-  //     meta: {discarded: {…}, errors: {…}}
-  //     result:
   //     rows: (11) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-  //     session: {sessionNumber: 1, date: Moment}
+  //     sessions: {sessionNumber: 1, date: Moment}
   return (
     <div className="App">
       <CssBaseline/>
       <Suspense fallback={<Loading/>}>
         <ButtonAppBar/>
-        {!!pages
+        {!!result
           ? <>
-            <TableByNames pages={pages}/>
             {
-              pages.map(page => {
+              result.sessions.map((session, sessionIndex) => {
+                const rows = filter(propEq('sessionIndex', sessionIndex), result.rows);
                 return <RawPage
-                  key={page.result.session.sessionNumber}
-                  rows={page.result.rows}
-                  session={page.result.session}
-                  errors={page.meta.errors}
+                  key={sessionIndex}
+                  rows={rows}
+                  session={session}
+                  errors={[]}
                 />;
               })
             }
           </>
-          : <PdfFilePicker onPagesLoaded={setPages}/>
+          : <PdfFilePicker onResultLoaded={setResult}/>
         }
       </Suspense>
     </div>

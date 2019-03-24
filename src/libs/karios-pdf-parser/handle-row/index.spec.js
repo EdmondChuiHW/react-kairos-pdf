@@ -32,6 +32,20 @@ describe('handleRow(…)', function () {
     ]);
   });
 
+  it('should return empty activity times', () => {
+    const rawStr = ['7:40', '15', 'Chapter 1 Review', 'Flavius Mui'];
+    const actual = handleRow(rawStr);
+    const activityTexts = ["Chapter 1 Review"];
+
+    expect(actual.activityTexts).toEqual(activityTexts);
+    expect(actual.declaredDuration.asMilliseconds()).toEqual(moment.duration(15, 'minutes').asMilliseconds());
+    expect(actual.facilitator).toEqual("Flavius Mui");
+    expect(actual.startTime.isValid()).toEqual(true);
+    expect(actual.category.category).toEqual('chapter-review');
+    expect(actual.category.number).toEqual(1);
+    expect(actual.errors).toEqual([]);
+  });
+
   it('should return handle empty duration', () => {
     const rawStr = ['7:40', '', 'Chapter 1 Review', 'Recap (2 min)', 'Discussion (10 min)', 'Flavius Mui'];
     const actual = handleRow(rawStr);

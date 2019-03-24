@@ -14,6 +14,7 @@ import {
   flip,
   isEmpty,
   keys,
+  last,
   length,
   lensPath,
   lensProp,
@@ -39,7 +40,7 @@ const pushIndexToAllExistingFacilitators = (facilitatorToRows, index) => {
   });
 };
 
-export function oldHandlePage(handleSession, textContent) {
+export const oldHandlePage = curry((handleSession, textContent) => {
   const sessions = [];
 
   const rows = [];
@@ -64,23 +65,23 @@ export function oldHandlePage(handleSession, textContent) {
     const item = textContent.items[allTextsIndex];
     if (item.str.startsWith('Session ')) {
       const s = handleSession(item.str);
-      sessions.push(s.result);
+      sessions.push(s);
 
     } else {
       const currentRowPositionY = item.transform[5];
       if (isStrStartTime(item.str)) {
         if (pendingRowInput && pendingRowInput.length) {
           const r = handleRow(pendingRowInput);
-          r.sessionIndex = sessions.length - 1;
-          rows[currentRowIndex] = r.result;
-          if (r.result.facilitator && r.result.facilitator.toLocaleLowerCase() === 'all') {
+          r.sessionIndex = last(sessions).sessionNumber - 1;
+          rows[currentRowIndex] = r;
+          if (r.facilitator && r.facilitator.toLocaleLowerCase() === 'all') {
             allFacilitatorsRows.push(currentRowIndex);
             pushIndexToAllExistingFacilitators(currentRowIndex);
           } else {
-            if (!facilitatorToRows[r.result.facilitator]) {
-              facilitatorToRows[r.result.facilitator] = allFacilitatorsRows.slice();
+            if (!facilitatorToRows[r.facilitator]) {
+              facilitatorToRows[r.facilitator] = allFacilitatorsRows.slice();
             }
-            facilitatorToRows[r.result.facilitator].push(currentRowIndex);
+            facilitatorToRows[r.facilitator].push(currentRowIndex);
           }
         }
         lastRowPositionY = currentRowPositionY;
@@ -111,7 +112,7 @@ export function oldHandlePage(handleSession, textContent) {
     facilitatorToRows,
     discarded,
   };
-}
+});
 
 const makePage = ({sessions, rows, facilitatorToRows, discarded}) => ({
   sessions,

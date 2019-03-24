@@ -4,7 +4,7 @@ import './RawPage.css';
 import {useTranslation} from "react-i18next";
 
 export function RawPage(props) {
-  const {rows, session, errors} = props;
+  const {rows, session} = props;
   const [t] = useTranslation();
   return <div className="raw-page">
     <h2>{t('sessionTitle', {num: session.sessionNumber})}</h2>
@@ -30,7 +30,6 @@ export function RawPage(props) {
       {rows.map((row, index) => (
         <TimeRow
           key={index}
-          errors={errors.rows[index]}
           {...row}
         />
       ))}

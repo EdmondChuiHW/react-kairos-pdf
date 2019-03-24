@@ -20,9 +20,9 @@ describe('chapterReviewParser', () => {
     expect(chapterReviewParser([`Chapter 7 "Culture C" Review`]).category).toEqual(chapterReview);
   });
 
-  it('should return [Unknown topic] for missing topic', () => {
+  it('should return empty for missing topic', () => {
     expect(chapterReviewParser([`Chapter 7 Review`]).number).toEqual(7);
-    expect(chapterReviewParser([`Chapter 7 Review`]).topic).toEqual('[Unknown topic]');
+    expect(chapterReviewParser([`Chapter 7 Review`]).topic).toEqual('');
     expect(chapterReviewParser([`Chapter 7 Review`]).category).toEqual(chapterReview);
   });
 
@@ -32,9 +32,9 @@ describe('chapterReviewParser', () => {
     expect(chapterReviewParser([`Chapter "Culture C" Review`]).category).toEqual(chapterReview);
   });
 
-  it('should return -1 [Unknown topic] for missing', () => {
+  it('should return -1 empty for missing', () => {
     expect(chapterReviewParser([`Chapter Review`]).number).toEqual(-1);
-    expect(chapterReviewParser([`Chapter Review`]).topic).toEqual('[Unknown topic]');
+    expect(chapterReviewParser([`Chapter Review`]).topic).toEqual('');
     expect(chapterReviewParser([`Chapter Review`]).category).toEqual(chapterReview);
   });
 

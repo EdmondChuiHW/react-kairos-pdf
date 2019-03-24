@@ -25,7 +25,6 @@ const chapterIntroMatcher = match(/(?:^chapter\s*(\d*)\s*(.+)\s*introduction$)|(
 
 export const viewChapterNumber = either(view(lensIndex(1)), view(lensIndex(3)));
 export const viewChapterTopic = either(view(lensIndex(2)), view(lensIndex(4)));
-const unknownTopicStr = '[Unknown topic]';
 
 const chapterIndexAndTopicReducer = (acc, curr) => pipe(
   chapterIntroMatcher,
@@ -39,7 +38,7 @@ const chapterIndexAndTopicReducer = (acc, curr) => pipe(
         when(isNilOrEmpty, always('')),
         stripAllQuotes,
         trim,
-        when(isNilOrEmpty, always(unknownTopicStr)),
+        when(isNilOrEmpty, always('')),
       ),
     ]),
   ),
@@ -48,6 +47,6 @@ const chapterIndexAndTopicReducer = (acc, curr) => pipe(
 export const chapterIntroParser = pipe(
   unless(chapterIntroTester, throwErrorWithMessage('Not chapter intro strings')),
   reduce(chapterIndexAndTopicReducer, []),
-  when(isNilOrEmpty, always([-1, unknownTopicStr])),
+  when(isNilOrEmpty, always([-1, ''])),
   apply(makeChapter),
 );

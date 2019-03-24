@@ -9,7 +9,6 @@ const chapterReviewMatcher = match(/^chapter\s*(\d*)\s*(.+)\s*review$/i);
 
 const chapterIndexLens = lensIndex(1);
 const chapterTopicLens = lensIndex(2);
-const unknownTopicStr = '[Unknown topic]';
 
 const chapterIndexAndTopicReducer = (acc, curr) => pipe(
   chapterReviewMatcher,
@@ -23,7 +22,7 @@ const chapterIndexAndTopicReducer = (acc, curr) => pipe(
         when(isNilOrEmpty, ''),
         stripAllQuotes,
         trim,
-        when(isNilOrEmpty, always(unknownTopicStr)),
+        when(isNilOrEmpty, always('')),
       ),
     ]),
   ),
@@ -32,6 +31,6 @@ const chapterIndexAndTopicReducer = (acc, curr) => pipe(
 export const chapterReviewParser = pipe(
   unless(chapterReviewTester, throwErrorWithMessage('Not chapter review strings')),
   reduce(chapterIndexAndTopicReducer, []),
-  when(isNilOrEmpty, always([-1, unknownTopicStr])),
+  when(isNilOrEmpty, always([-1, ''])),
   apply(makeChapter),
 );

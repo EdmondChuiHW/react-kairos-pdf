@@ -20,7 +20,7 @@ export const focusPrayerParser = pipe(
       pipe(find(startsWithGpgOrFt), when(isNilOrEmpty, always(''))),
       pipe(
         reduce(prayerTargetReducer, ''),
-        when(isNilOrEmpty, always('[Unknown prayer target]')),
+        when(isNilOrEmpty, always('')),
       ),
     ],
   ),

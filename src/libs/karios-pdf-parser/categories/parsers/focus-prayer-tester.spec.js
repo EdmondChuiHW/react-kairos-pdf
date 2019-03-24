@@ -34,9 +34,9 @@ describe('focusPrayerParser', () => {
     expect(focusPrayerParser(['LRP Prayer Focus - Buddhist']).category).toEqual(focusPrayer);
   });
 
-  it('should return [Unknown prayer target] for missing prayer target', () => {
+  it('should return empty for missing prayer target', () => {
     expect(focusPrayerParser(['LRP Prayer Focus', 'GPG 2']).assignedGroup).toEqual('GPG 2');
-    expect(focusPrayerParser(['LRP Prayer Focus', 'GPG 2']).prayerTarget).toEqual('[Unknown prayer target]');
+    expect(focusPrayerParser(['LRP Prayer Focus', 'GPG 2']).prayerTarget).toEqual('');
     expect(focusPrayerParser(['LRP Prayer Focus', 'GPG 2']).category).toEqual(focusPrayer);
   });
 

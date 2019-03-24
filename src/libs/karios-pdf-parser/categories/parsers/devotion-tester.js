@@ -17,6 +17,6 @@ export const devotionParser = pipe(
   unless(devotionTester, throwErrorWithMessage('Not devotion strings')),
   reduce(topicReducer, ''),
   stripAllQuotes,
-  when(isNilOrEmpty, always('[Unknown topic]')),
+  when(isNilOrEmpty, always('')),
   makeDevotion,
 );

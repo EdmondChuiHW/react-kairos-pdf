@@ -35,9 +35,9 @@ describe('devotionParser', () => {
     expect(devotionParser([`Devotion "Power"`, `(changed to) devotion "Dam"`]).topic).toEqual('Dam');
   });
 
-  it('should return [Unknown topic] for missing topic', () => {
-    expect(devotionParser([`"" devotion`]).topic).toEqual('[Unknown topic]');
-    expect(devotionParser([`Devotion ""`]).topic).toEqual('[Unknown topic]');
+  it('should return empty for missing topic', () => {
+    expect(devotionParser([`"" devotion`]).topic).toEqual('');
+    expect(devotionParser([`Devotion ""`]).topic).toEqual('');
   });
 
   it('should throw for non-matches', () => {

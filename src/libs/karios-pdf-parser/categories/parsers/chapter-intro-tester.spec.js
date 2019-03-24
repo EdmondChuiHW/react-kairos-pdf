@@ -54,13 +54,13 @@ describe('chapterIntroParser', () => {
     expect(chapterIntroParser([`Introduction to Chapter 7 "Culture C"`]).category).toEqual(chapterIntro);
   });
 
-  it('should return [Unknown topic] for missing topic', () => {
+  it('should return empty for missing topic', () => {
     expect(chapterIntroParser([`Chapter 7 Introduction`]).number).toEqual(7);
-    expect(chapterIntroParser([`Chapter 7 Introduction`]).topic).toEqual('[Unknown topic]');
+    expect(chapterIntroParser([`Chapter 7 Introduction`]).topic).toEqual('');
     expect(chapterIntroParser([`Chapter 7 Introduction`]).category).toEqual(chapterIntro);
 
     expect(chapterIntroParser([`Introduction to Chapter 7`]).number).toEqual(7);
-    expect(chapterIntroParser([`Introduction to Chapter 7`]).topic).toEqual('[Unknown topic]');
+    expect(chapterIntroParser([`Introduction to Chapter 7`]).topic).toEqual('');
     expect(chapterIntroParser([`Introduction to Chapter 7`]).category).toEqual(chapterIntro);
   });
 
@@ -74,13 +74,13 @@ describe('chapterIntroParser', () => {
     expect(chapterIntroParser([`Introduction to Chapter "Culture C"`]).category).toEqual(chapterIntro);
   });
 
-  it('should return -1 [Unknown topic] for missing', () => {
+  it('should return -1 empty for missing', () => {
     expect(chapterIntroParser([`Chapter Introduction`]).number).toEqual(-1);
-    expect(chapterIntroParser([`Chapter Introduction`]).topic).toEqual('[Unknown topic]');
+    expect(chapterIntroParser([`Chapter Introduction`]).topic).toEqual('');
     expect(chapterIntroParser([`Chapter Introduction`]).category).toEqual(chapterIntro);
 
     expect(chapterIntroParser([`Introduction to Chapter`]).number).toEqual(-1);
-    expect(chapterIntroParser([`Introduction to Chapter`]).topic).toEqual('[Unknown topic]');
+    expect(chapterIntroParser([`Introduction to Chapter`]).topic).toEqual('');
     expect(chapterIntroParser([`Introduction to Chapter`]).category).toEqual(chapterIntro);
   });
 

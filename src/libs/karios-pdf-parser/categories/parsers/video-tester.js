@@ -20,6 +20,6 @@ export const videoParser = pipe(
   reduce(titleReducer, ''),
   stripAllQuotes,
   removeTrailingParenthesisAndContents,
-  when(isNilOrEmpty, always('[Unknown video]')),
+  when(isNilOrEmpty, always('')),
   makeVideo,
 );

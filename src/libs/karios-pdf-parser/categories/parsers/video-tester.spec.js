@@ -32,9 +32,9 @@ describe('videoParser', () => {
     expect(videoParser([`Video "The Ends of the Earth"`, `(changed to) Video - "Role of Prayer" (30 min)`]).title).toEqual('Role of Prayer');
   });
 
-  it('should return [Unknown topic] for missing topic', () => {
-    expect(videoParser([`Video ""`]).title).toEqual('[Unknown video]');
-    expect(videoParser([`Video - ""`]).title).toEqual('[Unknown video]');
+  it('should return empty for missing topic', () => {
+    expect(videoParser([`Video ""`]).title).toEqual('');
+    expect(videoParser([`Video - ""`]).title).toEqual('');
   });
 
   it('should throw for non-matches', () => {

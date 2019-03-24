@@ -15,11 +15,7 @@ import {
   view,
   when,
 } from "ramda";
-import {isNilOrEmpty, stripAllQuotes} from "../../utils";
-
-const throwError = msg => () => {
-  throw new Error(msg);
-};
+import {isNilOrEmpty, stripAllQuotes, throwErrorWithMessage} from "../../utils";
 
 const makeChapter = (index, topic) => ({category: 'chapter-intro', index, topic});
 
@@ -49,7 +45,7 @@ const chapterIndexAndTopicReducer = (acc, curr) => pipe(
 )(curr);
 
 export const chapterIntroParser = pipe(
-  unless(chapterIntroTester, throwError('Not chapter intro strings')),
+  unless(chapterIntroTester, throwErrorWithMessage('Not chapter intro strings')),
   reduce(chapterIndexAndTopicReducer, []),
   when(isNilOrEmpty, always([-1, unknownTopicStr])),
   apply(makeChapter),

@@ -1,9 +1,5 @@
 import {always, any, apply, ifElse, juxt, lensIndex, match, pipe, reduce, test, trim, unless, view, when} from "ramda";
-import {isNilOrEmpty, stripAllQuotes} from "../../utils";
-
-const throwError = msg => () => {
-  throw new Error(msg);
-};
+import {isNilOrEmpty, stripAllQuotes, throwErrorWithMessage} from "../../utils";
 
 const makeChapter = (index, topic) => ({category: 'chapter-review', index, topic});
 
@@ -33,7 +29,7 @@ const chapterIndexAndTopicReducer = (acc, curr) => pipe(
 )(curr);
 
 export const chapterReviewParser = pipe(
-  unless(chapterReviewTester, throwError('Not chapter review strings')),
+  unless(chapterReviewTester, throwErrorWithMessage('Not chapter review strings')),
   reduce(chapterIndexAndTopicReducer, []),
   when(isNilOrEmpty, always([-1, unknownTopicStr])),
   apply(makeChapter),

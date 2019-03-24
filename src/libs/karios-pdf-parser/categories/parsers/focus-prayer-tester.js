@@ -1,9 +1,5 @@
 import {always, any, complement, converge, find, findLast, match, pipe, reduce, test, unless, when} from "ramda";
-import {isNilOrEmpty, startsWithGpgOrFt} from "../../utils";
-
-const throwError = msg => () => {
-  throw new Error(msg);
-};
+import {isNilOrEmpty, startsWithGpgOrFt, throwErrorWithMessage} from "../../utils";
 
 const makeFocusPrayer = (assignedGroup, prayerTarget) => ({category: 'focus-prayer', assignedGroup, prayerTarget});
 
@@ -17,7 +13,7 @@ const prayerTargetReducer = (acc, curr) => pipe(
 )(curr);
 
 export const focusPrayerParser = pipe(
-  unless(focusPrayerTester, throwError('Not focus prayer strings')),
+  unless(focusPrayerTester, throwErrorWithMessage('Not focus prayer strings')),
   converge(
     makeFocusPrayer, [
       pipe(find(startsWithGpgOrFt), when(isNilOrEmpty, always(''))),

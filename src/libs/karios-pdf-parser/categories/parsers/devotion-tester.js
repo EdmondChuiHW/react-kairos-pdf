@@ -1,9 +1,5 @@
 import {always, any, complement, findLast, match, pipe, reduce, test, unless, when} from "ramda";
-import {isNilOrEmpty, stripAllQuotes} from "../../utils";
-
-const throwError = msg => () => {
-  throw new Error(msg);
-};
+import {isNilOrEmpty, stripAllQuotes, throwErrorWithMessage} from "../../utils";
 
 const makeDevotion = (topic) => ({category: 'devotion', topic});
 
@@ -17,7 +13,7 @@ const topicReducer = (acc, curr) => pipe(
 )(curr);
 
 export const devotionParser = pipe(
-  unless(devotionTester, throwError('Not devotion strings')),
+  unless(devotionTester, throwErrorWithMessage('Not devotion strings')),
   reduce(topicReducer, ''),
   stripAllQuotes,
   when(isNilOrEmpty, always('[Unknown topic]')),

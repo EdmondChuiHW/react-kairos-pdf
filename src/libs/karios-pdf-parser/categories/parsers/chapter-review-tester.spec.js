@@ -14,25 +14,25 @@ describe('chapterReviewTester', () => {
 
 describe('chapterReviewParser', () => {
   it('should return devotion object for matches', () => {
-    expect(chapterReviewParser([`Chapter 7 "Culture C" Review`]).index).toEqual(7);
+    expect(chapterReviewParser([`Chapter 7 "Culture C" Review`]).number).toEqual(7);
     expect(chapterReviewParser([`Chapter 7 "Culture C" Review`]).topic).toEqual('Culture C');
     expect(chapterReviewParser([`Chapter 7 "Culture C" Review`]).category).toEqual('chapter-review');
   });
 
   it('should return [Unknown topic] for missing topic', () => {
-    expect(chapterReviewParser([`Chapter 7 Review`]).index).toEqual(7);
+    expect(chapterReviewParser([`Chapter 7 Review`]).number).toEqual(7);
     expect(chapterReviewParser([`Chapter 7 Review`]).topic).toEqual('[Unknown topic]');
     expect(chapterReviewParser([`Chapter 7 Review`]).category).toEqual('chapter-review');
   });
 
   it('should return -1 for missing index', () => {
-    expect(chapterReviewParser([`Chapter "Culture C" Review`]).index).toEqual(-1);
+    expect(chapterReviewParser([`Chapter "Culture C" Review`]).number).toEqual(-1);
     expect(chapterReviewParser([`Chapter "Culture C" Review`]).topic).toEqual('Culture C');
     expect(chapterReviewParser([`Chapter "Culture C" Review`]).category).toEqual('chapter-review');
   });
 
   it('should return -1 [Unknown topic] for missing', () => {
-    expect(chapterReviewParser([`Chapter Review`]).index).toEqual(-1);
+    expect(chapterReviewParser([`Chapter Review`]).number).toEqual(-1);
     expect(chapterReviewParser([`Chapter Review`]).topic).toEqual('[Unknown topic]');
     expect(chapterReviewParser([`Chapter Review`]).category).toEqual('chapter-review');
   });

@@ -1,7 +1,7 @@
 import {always, any, apply, ifElse, juxt, lensIndex, match, pipe, reduce, test, trim, unless, view, when} from "ramda";
 import {isNilOrEmpty, stripAllQuotes, throwErrorWithMessage} from "../../utils";
 
-const makeChapter = (index, topic) => ({category: 'chapter-review', index, topic});
+const makeChapter = (number, topic) => ({category: 'chapter-review', number, topic});
 
 export const chapterReviewTester = any(test(/^chapter\s*\d*.+\s*review$/i));
 const chapterReviewMatcher = match(/^chapter\s*(\d*)\s*(.+)\s*review$/i);

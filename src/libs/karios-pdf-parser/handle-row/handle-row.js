@@ -3,6 +3,7 @@ import {always, apply, converge, dec, identity, ifElse, juxt, last, length, lens
 import moment from "moment";
 import {acceptedTimeFormats} from "../consts";
 import {stringsToTimeTotal} from "../strings-to-time-total/strings-to-time-total";
+import {guessCategoryFromRawStrings} from "../categories/guess-category";
 
 const makeRow = (startTime, declaredDuration, activityTexts, facilitator, errors) => ({
   startTime,
@@ -10,6 +11,7 @@ const makeRow = (startTime, declaredDuration, activityTexts, facilitator, errors
   activityTexts,
   facilitator,
   errors,
+  category: guessCategoryFromRawStrings(activityTexts),
 });
 
 const startTimeFromStr = s => moment(s, acceptedTimeFormats);

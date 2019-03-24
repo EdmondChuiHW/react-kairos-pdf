@@ -17,12 +17,12 @@ import {
 } from "ramda";
 import {isNilOrEmpty, stripAllQuotes, throwErrorWithMessage} from "../../utils";
 
-const makeChapter = (index, topic) => ({category: 'chapter-intro', index, topic});
+const makeChapter = (number, topic) => ({category: 'chapter-intro', number, topic});
 
 export const chapterIntroTester = any(test(/(?:^chapter\s*\d*\s*.+\s*introduction$)|(?:^introduction\s*to\s*chapter\s*\d*\s*.*\s*)/i));
 const chapterIntroMatcher = match(/(?:^chapter\s*(\d*)\s*(.+)\s*introduction$)|(?:^introduction\s*to\s*chapter\s*(\d*)\s*(.*)\s*)/i);
 
-export const viewChapterIndex = either(view(lensIndex(1)), view(lensIndex(3)));
+export const viewChapterNumber = either(view(lensIndex(1)), view(lensIndex(3)));
 export const viewChapterTopic = either(view(lensIndex(2)), view(lensIndex(4)));
 const unknownTopicStr = '[Unknown topic]';
 
@@ -32,7 +32,7 @@ const chapterIndexAndTopicReducer = (acc, curr) => pipe(
     isNilOrEmpty,
     always(acc),
     juxt([
-      pipe(viewChapterIndex, when(isNilOrEmpty, always('-1')), Number.parseInt),
+      pipe(viewChapterNumber, when(isNilOrEmpty, always('-1')), Number.parseInt),
       pipe(
         viewChapterTopic,
         when(isNilOrEmpty, always('')),

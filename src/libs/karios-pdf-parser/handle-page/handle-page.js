@@ -39,22 +39,13 @@ const pushIndexToAllExistingFacilitators = (facilitatorToRows, index) => {
   });
 };
 
-function oldHandlePage(handleSession, textContent) {
-  let session = null;
+export function oldHandlePage(handleSession, textContent) {
+  const sessions = [];
 
   const rows = [];
   let pendingRowInput = [];
 
-  const discarded = {
-    page: [],
-    session: [],
-    rows: [],
-  };
-  const errors = {
-    page: [],
-    session: [],
-    rows: [],
-  };
+  const discarded = [];
   const facilitatorToRows = {};
   const allFacilitatorsRows = [];
 
@@ -71,17 +62,16 @@ function oldHandlePage(handleSession, textContent) {
   let currentRowIndex = -1;
   while (allTextsIndex < textContent.items.length) {
     const item = textContent.items[allTextsIndex];
-    if (!session && item.str.startsWith('Session ')) {
+    if (item.str.startsWith('Session ')) {
       const s = handleSession(item.str);
-      session = s.result;
-      discarded.session = s.meta.session;
-      errors.session = s.meta.errors;
+      sessions.push(s.result);
 
     } else {
       const currentRowPositionY = item.transform[5];
       if (isStrStartTime(item.str)) {
         if (pendingRowInput && pendingRowInput.length) {
           const r = handleRow(pendingRowInput);
+          r.sessionIndex = sessions.length - 1;
           rows[currentRowIndex] = r.result;
           if (r.result.facilitator && r.result.facilitator.toLocaleLowerCase() === 'all') {
             allFacilitatorsRows.push(currentRowIndex);
@@ -91,12 +81,6 @@ function oldHandlePage(handleSession, textContent) {
               facilitatorToRows[r.result.facilitator] = allFacilitatorsRows.slice();
             }
             facilitatorToRows[r.result.facilitator].push(currentRowIndex);
-          }
-          if (r.meta.discarded && r.meta.discarded.length) {
-            discarded.rows[currentRowIndex] = r.meta.discarded;
-          }
-          if (r.meta.errors && r.meta.errors.length) {
-            errors.rows[currentRowIndex] = r.meta.errors;
           }
         }
         lastRowPositionY = currentRowPositionY;
@@ -108,11 +92,11 @@ function oldHandlePage(handleSession, textContent) {
         if (currentRowIndex >= 0) {
           pendingRowInput.push(item.str);
         } else {
-          discarded.page.push(item.str);
+          discarded.push(item.str);
         }
       } else {
         if (currentRowIndex < 0) {
-          discarded.page.push(item.str);
+          discarded.push(item.str);
         } else {
           pendingRowInput.push(item.str);
         }
@@ -122,10 +106,9 @@ function oldHandlePage(handleSession, textContent) {
     allTextsIndex += 1;
   }
   return {
-    session,
+    sessions,
     rows,
     facilitatorToRows,
-    errors,
     discarded,
   };
 }

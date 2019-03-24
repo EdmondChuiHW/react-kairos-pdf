@@ -7,7 +7,6 @@ import {
   filter,
   find,
   head,
-  identity,
   join,
   juxt,
   last,
@@ -17,7 +16,6 @@ import {
   pipe,
   prop,
   propEq,
-  sortBy,
   unless,
   view,
   when,
@@ -25,11 +23,25 @@ import {
 import React from "react";
 import {formatSessionDateStr, formatStartEndTimeStr, viewTextFromCategory} from "../../utils/utils";
 import './TableBySessions.css';
-import {knownCategoryTypes} from "../../libs/karios-pdf-parser/categories/category-types";
+import {
+  chapterIntro,
+  chapterReview,
+  devotion,
+  focusPrayer,
+  video,
+  worship,
+} from "../../libs/karios-pdf-parser/categories/category-types";
 import {capitalize, lowerCase} from "lodash-es";
 import {isNilOrEmpty} from "../../libs/karios-pdf-parser/utils";
 
-const sortedCategories = sortBy(identity)(knownCategoryTypes);
+const sortedCategories = [
+  worship,
+  devotion,
+  focusPrayer,
+  chapterReview,
+  chapterIntro,
+  video,
+];
 
 export const TableBySessions = ({sessions, rows}) => {
   return compose(

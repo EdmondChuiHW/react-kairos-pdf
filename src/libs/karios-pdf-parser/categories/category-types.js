@@ -1,5 +1,5 @@
-export const chapterIntro = 'chapter-intro';
-export const chapterReview = 'chapter-review';
+export const chapterIntro = 'introduction';
+export const chapterReview = 'review';
 export const devotion = 'devotion';
 export const focusPrayer = 'focus-prayer';
 export const video = 'video';

@@ -28,7 +28,6 @@ import {
   unless,
   view,
 } from "ramda";
-import {isLineYUnchanged} from "../is-line-y-unchanged";
 import {handleSession} from "../handle-session";
 import {throwErrorWithMessage} from "../utils";
 
@@ -57,7 +56,7 @@ export const oldHandlePage = curry((handleSession, textContent) => {
     });
   };
 
-  let lastRowPositionY = null;
+  let hasStartedParsingRows = false;
 
   let allTextsIndex = 0;
   let currentRowIndex = -1;
@@ -66,9 +65,9 @@ export const oldHandlePage = curry((handleSession, textContent) => {
     if (item.str.startsWith('Session ')) {
       const s = handleSession(item.str);
       sessions.push(s);
+      hasStartedParsingRows = false;
 
     } else {
-      const currentRowPositionY = item.transform[5];
       if (isStrStartTime(item.str)) {
         if (pendingRowInput && pendingRowInput.length) {
           const r = handleRow(pendingRowInput);
@@ -84,23 +83,14 @@ export const oldHandlePage = curry((handleSession, textContent) => {
             facilitatorToRows[r.facilitator].push(currentRowIndex);
           }
         }
-        lastRowPositionY = currentRowPositionY;
         pendingRowInput = [];
         currentRowIndex += 1;
+        hasStartedParsingRows = true;
       }
-      const isLineUnchanged = isLineYUnchanged(lastRowPositionY, currentRowPositionY);
-      if (isLineUnchanged) {
-        if (currentRowIndex >= 0) {
-          pendingRowInput.push(item.str);
-        } else {
-          discarded.push(item.str);
-        }
+      if (!hasStartedParsingRows) {
+        discarded.push(item.str);
       } else {
-        if (currentRowIndex < 0) {
-          discarded.push(item.str);
-        } else {
-          pendingRowInput.push(item.str);
-        }
+        pendingRowInput.push(item.str);
       }
     }
 

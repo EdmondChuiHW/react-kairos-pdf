@@ -1,12 +1,11 @@
 import {
   addIndex,
-  always,
   compose,
   curry,
   filter,
   find,
   identity,
-  isNil,
+  join,
   lensProp,
   map,
   pathEq,
@@ -73,22 +72,18 @@ const Session = (session) => <>
 
 const Cell = curry((key, text) => <td key={key}>{text}</td>);
 
-const findCategory = c => find(pathEq(['category', 'category'], c));
+const findRowWithCategory = c => find(pathEq(['category', 'category'], c));
 
-const mapCatTypeToCategory = cType => pipe(
-  findCategory(cType),
-  unless(isNil, prop('category')),
-);
-
-const mapCategoryToString = fallBackTextFn => unless(isNilOrEmpty, pipe(
+const mapRowToString = fallBackTextFn => row => unless(isNilOrEmpty, pipe(
+  prop('category'),
   viewTextFromCategory,
-  when(isNilOrEmpty, fallBackTextFn),
-));
+  when(isNilOrEmpty, () => fallBackTextFn(row)),
+))(row);
 
 const Categories = rows => addIndex(map)((c, i) =>
   pipe(
-    mapCatTypeToCategory(c),
-    mapCategoryToString(always('fall')),
+    findRowWithCategory(c),
+    mapRowToString(unless(isNilOrEmpty, pipe(prop('activityTexts'), join('\n')))),
     Cell(i),
   )(rows),
 )(sortedCategories);

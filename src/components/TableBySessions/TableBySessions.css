@@ -1,0 +1,17 @@
+.table-by-sessions {
+}
+
+.table-by-sessions table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid;
+}
+
+.table-by-sessions td {
+  border: 1px solid;
+}
+
+.table-by-sessions th {
+  border: 1px solid;
+  text-align: left;
+}

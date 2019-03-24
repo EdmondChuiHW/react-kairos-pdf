@@ -4,8 +4,7 @@ import CssBaseline from "@material-ui/core/es/CssBaseline";
 import ButtonAppBar from "./components/ButtonAppBar/ButtonAppBar";
 import {PdfFilePicker} from "./components/PdfFilePicker/PdfFilePicker";
 import {Loading} from "./components/Loading/Loading";
-import {RawPage} from "./components/RawPage/RawPage";
-import {filter, propEq} from "ramda";
+import {TableBySessions} from "./components/TableBySessions/TableBySessions";
 
 export function App() {
   const [result, setResult] = useState(null);
@@ -22,17 +21,18 @@ export function App() {
         <ButtonAppBar/>
         {!!result
           ? <>
-            {
-              result.sessions.map((session, sessionIndex) => {
-                const rows = filter(propEq('sessionIndex', sessionIndex), result.rows);
-                return <RawPage
-                  key={sessionIndex}
-                  rows={rows}
-                  session={session}
-                  errors={[]}
-                />;
-              })
-            }
+            <TableBySessions {...result}/>
+            {/*{*/}
+            {/*result.sessions.map((session, sessionIndex) => {*/}
+            {/*const rows = filter(propEq('sessionIndex', sessionIndex), result.rows);*/}
+            {/*return <RawPage*/}
+            {/*key={sessionIndex}*/}
+            {/*rows={rows}*/}
+            {/*session={session}*/}
+            {/*errors={[]}*/}
+            {/*/>;*/}
+            {/*})*/}
+            {/*}*/}
           </>
           : <PdfFilePicker onResultLoaded={setResult}/>
         }

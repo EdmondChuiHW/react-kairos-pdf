@@ -29,3 +29,7 @@ export const viewTextFromCategory = cond([
   [catEq(other), always('')],
   [T, always('')],
 ]);
+
+export const formatSessionDateStr = sessionTime => sessionTime.format('MMM D (ddd)');
+export const formatRowTimeStr = rowTime => rowTime.format('h:mm');
+export const formatStartEndTimeStr = (a, b) => `${formatRowTimeStr(a)}-${formatRowTimeStr(b)}`;

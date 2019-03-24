@@ -1,8 +1,35 @@
 import {handleRow} from "../handle-row";
 import moment from "moment";
 import {acceptedTimeFormats} from "../consts";
-import {curry, keys, lensPath, lensProp, view} from "ramda";
+import {
+  always,
+  append,
+  assoc,
+  compose,
+  cond,
+  converge,
+  curry,
+  dissoc,
+  equals,
+  flip,
+  isEmpty,
+  keys,
+  length,
+  lensPath,
+  lensProp,
+  over,
+  pipe,
+  prop,
+  set,
+  startsWith,
+  T,
+  transduce,
+  unless,
+  view,
+} from "ramda";
 import {isLineYUnchanged} from "../is-line-y-unchanged";
+import {handleSession} from "../handle-session";
+import {throwErrorWithMessage} from "../utils";
 
 export const isStrStartTime = str => str.length >= 4 && moment(str, acceptedTimeFormats, true).isValid();
 
@@ -11,11 +38,6 @@ const pushIndexToAllExistingFacilitators = (facilitatorToRows, index) => {
     facilitatorToRows[name].push(index);
   });
 };
-
-const getItems = view(lensProp('items'));
-
-const getItemStr = view(lensProp('str'));
-const getItemY = view(lensPath(['transform', 5]));
 
 function oldHandlePage(handleSession, textContent) {
   let session = null;
@@ -115,8 +137,87 @@ const makePage = ({sessions, rows, facilitatorToRows, discarded}) => ({
   discarded,
 });
 
-const handlePage = (handleSession, textContent) => {
+const viewItems = prop('items');
 
-};
+const viewItemStr = prop('str');
+const viewItemY = view(lensPath(['transform', 5]));
+
+const isStrSession = startsWith('Session ');
+
+const sessionType = 'session';
+const pendingCellType = 'cell';
+const cellFlushMarkerType = 'cell:flush-marker';
+const discardType = 'discard';
+
+const assocType = assoc('type');
+const dissocType = dissoc('type');
+const viewType = prop('type');
+
+const assocSessionIndex = assoc('sessionIndex');
+const assocRawStr = assoc('rawStr');
+
+const makeDiscard = assoc('type', discardType);
+
+const makeResult = () => ({sessions: [], rows: [], pendingCells: [], lastY: -1});
+const sessionsLens = lensProp('sessions');
+const rowsLens = lensProp('rows');
+const pendingCellsLens = lensProp('pendingCells');
+const lastYLens = lensProp('lastY');
+const viewCurrentSessionsIndex = pipe(view(sessionsLens), length);
+
+const appendWithLens = flip(over(flip(append)));
+const appendToSessions = appendWithLens(sessionsLens);
+const appendToRows = appendWithLens(rowsLens);
+const appendToPendingCells = appendWithLens(pendingCellsLens);
+
+const makeCellFlushMarker = pipe(assocRawStr, assocType(cellFlushMarkerType));
+
+const xForm = compose(
+  cond([
+    [pipe(viewItemStr, isStrSession), pipe(viewItemStr, handleSession, assocType(sessionType))],
+    [pipe(viewItemStr, isStrStartTime), makeCellFlushMarker],
+    [T, makeDiscard],
+  ]),
+);
+
+const ifTypeEquals = pipe(viewType, equals);
+const updateLastY = set(lastYLens);
+
+const flushPendingCellsIntoRowIfNotEmpty =
+  unless(
+    pipe(view(pendingCellsLens), isEmpty),
+    over(
+      pendingCellsLens,
+      pipe(over(rowsLens, handleRow), always([])),
+    ),
+  );
+
+const accFlushCell = acc => pipe(
+  flushPendingCellsIntoRowIfNotEmpty(),
+);
+
+const accRow = acc => pipe(
+  dissocType,
+  converge(assocSessionIndex, [viewCurrentSessionsIndex]),
+  converge(updateLastY, [viewItemY]),
+  appendToRows(acc),
+);
+
+const accFn = (acc, cur) => pipe(
+  cond([
+    [ifTypeEquals(sessionType), pipe(dissocType, appendToSessions(acc))],
+    [ifTypeEquals(cellFlushMarkerType), accFlushCell(acc)],
+    [ifTypeEquals(pendingCellType), pipe(discardType, appendToPendingCells(acc))],
+    [ifTypeEquals(discardType), always(acc)],
+    [T, throwErrorWithMessage(`Unknown inc cur ${cur}`)],
+  ]),
+)(cur);
+
+const handlePage = pipe(
+  viewItems,
+  transduce(xForm, accFn, makeResult()),
+  flushPendingCellsIntoRowIfNotEmpty,
+  dissoc('pendingCells'),
+);
 
 export const makeHandlePage = curry(handlePage);

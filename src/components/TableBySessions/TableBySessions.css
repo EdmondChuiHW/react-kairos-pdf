@@ -9,6 +9,7 @@
 
 .table-by-sessions td {
   border: 1px solid;
+  white-space: pre-wrap;
 }
 
 .table-by-sessions th {

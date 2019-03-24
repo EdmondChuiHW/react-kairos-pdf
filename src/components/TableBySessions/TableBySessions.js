@@ -6,7 +6,6 @@ import {
   filter,
   find,
   identity,
-  ifElse,
   isNil,
   lensProp,
   map,
@@ -15,13 +14,16 @@ import {
   prop,
   propEq,
   sortBy,
+  unless,
   view,
+  when,
 } from "ramda";
 import React from "react";
 import {viewTextFromCategory} from "../../utils/utils";
 import './TableBySessions.css';
-import {knownCategoryTypes, other} from "../../libs/karios-pdf-parser/categories/category-types";
+import {knownCategoryTypes} from "../../libs/karios-pdf-parser/categories/category-types";
 import {capitalize, lowerCase} from "lodash-es";
+import {isNilOrEmpty} from "../../libs/karios-pdf-parser/utils";
 
 const sortedCategories = sortBy(identity)(knownCategoryTypes);
 
@@ -69,19 +71,27 @@ const Session = (session) => <>
   <td>{pipe(view(sessionTimeLens), formatDateTimeStr)(session)}</td>
 </>;
 
-const Category = curry((keyPrefix, cat) => <td key={keyPrefix + cat.category}>{viewTextFromCategory(cat)}</td>);
+const Cell = curry((key, text) => <td key={key}>{text}</td>);
 
 const findCategory = c => find(pathEq(['category', 'category'], c));
 
-const Categories = rows => addIndex(map)((c, i) => pipe(
-  findCategory(c),
-  ifElse(
-    isNil,
-    always({category: other}),
-    prop('category'),
-  ),
-  Category(i),
-)(rows), sortedCategories);
+const mapCatTypeToCategory = cType => pipe(
+  findCategory(cType),
+  unless(isNil, prop('category')),
+);
+
+const mapCategoryToString = fallBackTextFn => unless(isNilOrEmpty, pipe(
+  viewTextFromCategory,
+  when(isNilOrEmpty, fallBackTextFn),
+));
+
+const Categories = rows => addIndex(map)((c, i) =>
+  pipe(
+    mapCatTypeToCategory(c),
+    mapCategoryToString(always('fall')),
+    Cell(i),
+  )(rows),
+)(sortedCategories);
 
 const CategoryHeaders = map(pipe(
   lowerCase,

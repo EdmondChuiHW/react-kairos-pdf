@@ -17,7 +17,7 @@ describe('focusPrayerTester', () => {
   });
 });
 
-fdescribe('focusPrayerParser', () => {
+describe('focusPrayerParser', () => {
   it('should return worship object for matches', () => {
     expect(focusPrayerParser(['LRP Prayer Focus - Buddhist', 'FT Team']).assignedGroup).toEqual('FT Team');
     expect(focusPrayerParser(['LRP Prayer Focus - Buddhist', 'FT Team']).prayerTarget).toEqual('Buddhist');

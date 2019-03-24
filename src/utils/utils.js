@@ -4,7 +4,7 @@ import {
   chapterReview,
   devotion,
   focusPrayer,
-  unknown,
+  other,
   video,
   worship,
 } from "../libs/karios-pdf-parser/categories/category-types";
@@ -26,6 +26,6 @@ export const viewTextFromCategory = cond([
   [catEq(focusPrayer), pipe(props(['prayerTarget', 'assignedGroup']), join('\n'))],
   [catEq(video), prop('title')],
   [catEq(worship), prop('assignedGroup')],
-  [catEq(unknown), always('')],
+  [catEq(other), always('')],
   [T, always('')],
 ]);

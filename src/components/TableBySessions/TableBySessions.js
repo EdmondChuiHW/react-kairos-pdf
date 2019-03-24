@@ -20,7 +20,7 @@ import {
 import React from "react";
 import {viewTextFromCategory} from "../../utils/utils";
 import './TableBySessions.css';
-import {knownCategoryTypes, unknown} from "../../libs/karios-pdf-parser/categories/category-types";
+import {knownCategoryTypes, other} from "../../libs/karios-pdf-parser/categories/category-types";
 import {capitalize, lowerCase} from "lodash-es";
 
 const sortedCategories = sortBy(identity)(knownCategoryTypes);
@@ -77,7 +77,7 @@ const Categories = rows => addIndex(map)((c, i) => pipe(
   findCategory(c),
   ifElse(
     isNil,
-    always({category: unknown}),
+    always({category: other}),
     prop('category'),
   ),
   Category(i),

@@ -1,4 +1,4 @@
-import {always, cond, join, pipe, prop, propEq, props, T} from "ramda";
+import {always, cond, head, join, pathEq, pipe, prop, propEq, props, T} from "ramda";
 import {
   chapterIntro,
   chapterReview,
@@ -8,6 +8,7 @@ import {
   video,
   worship,
 } from "../libs/karios-pdf-parser/categories/category-types";
+import {stripAllQuotes} from "../libs/karios-pdf-parser/utils";
 
 export function pushToArrayAtKey(obj, key, newItem) {
   if (!obj[key]) {
@@ -28,6 +29,13 @@ export const viewTextFromCategory = cond([
   [catEq(worship), prop('assignedGroup')],
   [catEq(other), always('')],
   [T, always('')],
+]);
+
+const rowCatEq = pathEq(['category', 'category']);
+
+export const fallbackTextForRow = cond([
+  [rowCatEq(video), pipe(prop('activityTexts'), head, stripAllQuotes)],
+  [T, pipe(prop('activityTexts'), join('\n'))],
 ]);
 
 export const formatSessionDateStr = sessionTime => sessionTime.format('MMM D (ddd)');

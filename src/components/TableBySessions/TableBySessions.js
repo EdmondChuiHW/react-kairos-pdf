@@ -7,7 +7,6 @@ import {
   filter,
   find,
   head,
-  join,
   juxt,
   last,
   lensProp,
@@ -21,7 +20,7 @@ import {
   when,
 } from "ramda";
 import React from "react";
-import {formatSessionDateStr, formatStartEndTimeStr, viewTextFromCategory} from "../../utils/utils";
+import {fallbackTextForRow, formatSessionDateStr, formatStartEndTimeStr, viewTextFromCategory} from "../../utils/utils";
 import './TableBySessions.css';
 import {
   chapterIntro,
@@ -101,7 +100,7 @@ const mapRowToString = fallBackTextFn => row => unless(isNilOrEmpty, pipe(
 const Categories = rows => addIndex(map)((c, i) =>
   pipe(
     findRowWithCategory(c),
-    mapRowToString(unless(isNilOrEmpty, pipe(prop('activityTexts'), join('\n')))),
+    mapRowToString(unless(isNilOrEmpty, fallbackTextForRow)),
     Cell(i),
   )(rows),
 )(sortedCategories);

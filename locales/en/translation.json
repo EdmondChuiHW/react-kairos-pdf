@@ -1,0 +1,24 @@
+{
+  "title": "Kairos Run Sheet Helper",
+  "supportedLanguages": [
+    {
+      "code": "en",
+      "display": "🇨🇦English"
+    },
+    {
+      "code": "zh-hk",
+      "display": "🇭🇰Chinese (Traditional)"
+    },
+    {
+      "code": "zh-cn",
+      "display": "🇨🇳Chinese (Simplified)"
+    }
+  ],
+  "sessionTitle": "Session {{num}}",
+  "duration": "Duration (minutes)",
+  "time": "Time",
+  "activity": "Activity",
+  "facilitator": "Facilitator",
+  "uploadFilePrompt": "Click here to select the run sheet file. You can also drag and drop.",
+  "uploadFileFailed": "The file must be in Kairos PDF format. Please try again."
+}

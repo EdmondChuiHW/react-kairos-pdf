@@ -1,14 +1,16 @@
 {
-  "main.css": "/react-karios-pdf/static/css/main.c731a540.chunk.css",
-  "main.js": "/react-karios-pdf/static/js/main.1a731cd1.chunk.js",
-  "main.js.map": "/react-karios-pdf/static/js/main.1a731cd1.chunk.js.map",
+  "main.css": "/react-karios-pdf/static/css/main.824d5a95.chunk.css",
+  "main.js": "/react-karios-pdf/static/js/main.f58c7ff6.chunk.js",
+  "main.js.map": "/react-karios-pdf/static/js/main.f58c7ff6.chunk.js.map",
   "runtime~main.js": "/react-karios-pdf/static/js/runtime~main.03f7d144.js",
   "runtime~main.js.map": "/react-karios-pdf/static/js/runtime~main.03f7d144.js.map",
-  "static/js/2.ba1ca5ba.chunk.js": "/react-karios-pdf/static/js/2.ba1ca5ba.chunk.js",
-  "static/js/2.ba1ca5ba.chunk.js.map": "/react-karios-pdf/static/js/2.ba1ca5ba.chunk.js.map",
+  "static/css/2.92e651cc.chunk.css": "/react-karios-pdf/static/css/2.92e651cc.chunk.css",
+  "static/js/2.38b3226e.chunk.js": "/react-karios-pdf/static/js/2.38b3226e.chunk.js",
+  "static/js/2.38b3226e.chunk.js.map": "/react-karios-pdf/static/js/2.38b3226e.chunk.js.map",
   "index.html": "/react-karios-pdf/index.html",
-  "precache-manifest.6676e5b8dd0bf98504ee184b67e07a68.js": "/react-karios-pdf/precache-manifest.6676e5b8dd0bf98504ee184b67e07a68.js",
+  "precache-manifest.c0da2999b66237d3874a44a456bc8839.js": "/react-karios-pdf/precache-manifest.c0da2999b66237d3874a44a456bc8839.js",
   "service-worker.js": "/react-karios-pdf/service-worker.js",
-  "static/css/main.c731a540.chunk.css.map": "/react-karios-pdf/static/css/main.c731a540.chunk.css.map",
-  "static/media/logo.svg": "/react-karios-pdf/static/media/logo.5d5d9eef.svg"
+  "static/css/2.92e651cc.chunk.css.map": "/react-karios-pdf/static/css/2.92e651cc.chunk.css.map",
+  "static/css/main.824d5a95.chunk.css.map": "/react-karios-pdf/static/css/main.824d5a95.chunk.css.map",
+  "static/media/tableexport.min.css": "/react-karios-pdf/static/media/xlsx.b1d6261e.svg"
 }

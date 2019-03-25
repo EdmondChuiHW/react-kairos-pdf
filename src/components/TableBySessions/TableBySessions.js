@@ -60,8 +60,8 @@ export const TableBySessions = ({sessions, rows}) => {
 const sessionTimeLens = lensProp('date');
 const sessionNumberLens = lensProp('sessionNumber');
 
-const Table = children => <div className="table-by-sessions">
-  <table>
+const Table = children => <div className="table-by-sessions phantom">
+  <table id="schedule-by-session">
     <thead>
     <tr>
       <th>Session</th>

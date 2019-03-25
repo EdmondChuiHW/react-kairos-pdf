@@ -12,7 +12,7 @@ export const CapitalizedHeader = pipe(
 );
 
 export const TwoFragments = curry((a, b) => <>{a}{b}</>);
-export const Cell = curry((key, text) => <td key={key}>{text}</td>);
+export const Cell = curry((key, text) => <td key={key} className="tableexport-string">{text}</td>);
 
 export const mapWithBr = addIndex(map)((item, key) => <Fragment key={key}>{item}<br/></Fragment>);
 export const replaceLineBreakWithBr = when(is(String), pipe(

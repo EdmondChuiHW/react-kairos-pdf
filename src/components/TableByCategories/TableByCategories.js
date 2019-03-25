@@ -39,8 +39,8 @@ export const TableByCategories = ({rows, sessions, facilitators}) => {
 };
 
 const makeTable = curry((names, children) =>
-  <div className="table-by-categories">
-    <table>
+  <div className="table-by-categories phantom">
+    <table id="schedule-by-facilitator">
       <thead>
       <tr>
         <th/>

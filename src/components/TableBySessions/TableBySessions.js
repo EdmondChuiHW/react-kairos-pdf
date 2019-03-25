@@ -3,8 +3,9 @@ import {
   apply,
   compose,
   converge,
-  find,
+  filter,
   head,
+  join,
   juxt,
   last,
   lensProp,
@@ -82,7 +83,7 @@ const Session = (session) => <>
 
 const TimeDurationCell = pipe(formatStartEndTimeStr, Cell('duration'));
 
-const findRowWithCategory = c => find(pathEq(['category', 'category'], c));
+const findRowsWithCategory = c => filter(pathEq(['category', 'category'], c));
 
 const extractShortNameFromRow = pipe(prop('facilitator'), formatAsShortName);
 
@@ -93,8 +94,9 @@ const mapWithShortName = row => pipe(
 
 const Categories = rows => addIndex(map)((c, i) =>
   pipe(
-    findRowWithCategory(c),
-    mapWithShortName,
+    findRowsWithCategory(c),
+    map(mapWithShortName),
+    join('\n'),
     Cell(i),
   )(rows),
 )(sortedCategories);

@@ -36,13 +36,15 @@ import {
 } from "../libs/karios-pdf-parser/categories/category-types";
 import {isNilOrEmpty, stripAllQuotes} from "../libs/karios-pdf-parser/utils";
 
+export const excelLinefeed = '\r\n';
+export const replaceWithExcelLineFeed = replace(/\r?\n/g, excelLinefeed);
+
 export function pushToArrayAtKey(obj, key, newItem) {
   if (!obj[key]) {
     obj[key] = [];
   }
   obj[key].push(newItem);
 }
-
 
 const catEq = propEq('category');
 
@@ -98,6 +100,3 @@ export const mapRowToString = fallBackTextFn => row => unless(isNilOrEmpty, pipe
 ))(row);
 
 export const mapRowToStringWithFallback = mapRowToString(unless(isNilOrEmpty, fallbackTextForRow));
-
-export const excelLinefeed = '\r\n';
-export const replaceWithExcelLineFeed = replace(/\r?\n/g, excelLinefeed);

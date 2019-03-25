@@ -34,7 +34,7 @@ import {
   worship,
 } from "../../libs/karios-pdf-parser/categories/category-types";
 import {isNilOrEmpty} from "../../libs/karios-pdf-parser/utils";
-import {CapitalizedHeader, Cell, replaceLineBreakWithBr, RowWithKey, TwoFragments} from "../../utils/ui-utils";
+import {CapitalizedHeader, Cell, RowWithKey, TwoFragments} from "../../utils/ui-utils";
 
 const sortedCategories = [
   worship,
@@ -77,8 +77,8 @@ const Table = children => <div className="table-by-sessions phantom">
 </div>;
 
 const Session = (session) => <>
-  <td>{view(sessionNumberLens, session)}</td>
-  <td>{pipe(view(sessionTimeLens), formatSessionDateStr)(session)}</td>
+  <td className="tableexport-string">{view(sessionNumberLens, session)}</td>
+  <td className="tableexport-string">{pipe(view(sessionTimeLens), formatSessionDateStr)(session)}</td>
 </>;
 
 const TimeDurationCell = pipe(formatStartEndTimeStr, Cell('duration'));
@@ -91,7 +91,6 @@ const mapWithShortName = row => pipe(
   mapRowToStringWithFallback,
   unless(isNilOrEmpty, pipe(
     s => `${s}${excelLinefeed}- ${extractShortNameFromRow(row)}`,
-    replaceLineBreakWithBr,
   )),
 )(row);
 

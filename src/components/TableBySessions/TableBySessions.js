@@ -4,9 +4,11 @@ import {
   compose,
   converge,
   curry,
+  dropLast,
   filter,
   find,
   head,
+  join,
   juxt,
   last,
   lensProp,
@@ -15,6 +17,7 @@ import {
   pipe,
   prop,
   propEq,
+  split,
   unless,
   view,
   when,
@@ -91,10 +94,13 @@ const TimeDurationCell = pipe(formatStartEndTimeStr, Cell('duration'));
 
 const findRowWithCategory = c => find(pathEq(['category', 'category'], c));
 
+const extractShortNameFromRow = pipe(prop('facilitator'), split(' '), dropLast(1), join(' '));
+
 const mapRowToString = fallBackTextFn => row => unless(isNilOrEmpty, pipe(
   prop('category'),
   viewTextFromCategory,
   when(isNilOrEmpty, () => fallBackTextFn(row)),
+  unless(isNilOrEmpty, s => `${s}\n• ${extractShortNameFromRow(row)}`),
 ))(row);
 
 const Categories = rows => addIndex(map)((c, i) =>

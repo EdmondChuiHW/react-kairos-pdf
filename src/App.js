@@ -4,7 +4,7 @@ import CssBaseline from "@material-ui/core/es/CssBaseline";
 import ButtonAppBar from "./components/ButtonAppBar/ButtonAppBar";
 import {PdfFilePicker} from "./components/PdfFilePicker/PdfFilePicker";
 import {Loading} from "./components/Loading/Loading";
-import {TableBySessions} from "./components/TableBySessions/TableBySessions";
+import {TableByCategories} from "./components/TableByCategories/TableByCategories";
 
 export function App() {
   const [result, setResult] = useState(null);
@@ -21,7 +21,8 @@ export function App() {
         <ButtonAppBar/>
         {!!result
           ? <>
-            <TableBySessions {...result}/>
+            <TableByCategories {...result}/>
+            {/*<TableBySessions {...result}/>*/}
             {/*{*/}
             {/*result.sessions.map((session, sessionIndex) => {*/}
             {/*const rows = filter(propEq('sessionIndex', sessionIndex), result.rows);*/}

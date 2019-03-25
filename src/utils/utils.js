@@ -1,4 +1,4 @@
-import {always, cond, head, join, pathEq, pipe, prop, propEq, props, T} from "ramda";
+import {always, cond, dropLast, filter, head, join, pathEq, pipe, prop, propEq, props, split, T} from "ramda";
 import {
   chapterIntro,
   chapterReview,
@@ -37,6 +37,9 @@ export const fallbackTextForRow = cond([
   [rowCatEq(video), pipe(prop('activityTexts'), head, stripAllQuotes)],
   [T, pipe(prop('activityTexts'), join('\n'))],
 ]);
+
+export const collectRowsUnderSessionIndex = sI => filter(propEq('sessionIndex', sI));
+export const formatAsShortName = pipe(split(' '), dropLast(1), join(' '));
 
 export const formatSessionDateStr = sessionTime => sessionTime.format('MMM D (ddd)');
 export const formatRowTimeStr = rowTime => rowTime.format('h:mm');

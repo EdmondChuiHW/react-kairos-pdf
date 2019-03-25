@@ -4,6 +4,7 @@ import {readFileAsArrayBuffer} from "../../Utils";
 import {useTranslation} from "react-i18next";
 import Snackbar from "@material-ui/core/es/Snackbar";
 import {finalize, map, switchMap, tap} from "rxjs/operators";
+import {keys} from "ramda";
 import CircularProgress from "@material-ui/core/es/CircularProgress";
 import "./PdfFilePicker.css";
 import {readBufferToPages} from "../../libs/karios-pdf-parser";
@@ -24,10 +25,15 @@ export function PdfFilePicker(props) {
         switchMap(readBufferToPages),
         tap(pages => console.log('pages', pages.raw)),
         map(pages => pages.raw.reduce((acc, cur) => ({
+            facilitatorsIndex: {
+              ...acc.facilitatorsIndex,
+              ...cur.facilitatorToRows,
+            },
             sessions: acc.sessions.concat(cur.sessions),
             rows: acc.rows.concat(cur.rows),
-          }), {sessions: [], rows: []},
+          }), {sessions: [], rows: [], facilitatorsIndex: {}},
         )),
+        tap(result => result.facilitators = keys(result.facilitatorsIndex)),
         finalize(() => setIsLoading(false)),
       )
       .subscribe(result => {

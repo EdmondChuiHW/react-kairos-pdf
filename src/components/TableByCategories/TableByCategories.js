@@ -1,5 +1,5 @@
-import {apply, curry, flip, identity, ifElse, juxt, map, pipe, prepend, prop, sortBy} from "ramda";
-import {CapitalizedHeader, RowWithKey} from "../../utils/ui-utils";
+import {addIndex, always, apply, curry, flip, identity, ifElse, juxt, map, pipe, prepend, prop, sortBy} from "ramda";
+import {CapitalizedHeader, Cell, RowWithKey} from "../../utils/ui-utils";
 import React, {useMemo} from "react";
 import "./TableByCategories.css";
 import {
@@ -62,29 +62,36 @@ const viewRowIndexArrayFromName = flip(prop);
 // {'Sam': rowIndex[], 'Laura': rowIndex[], …} => cell[]
 const mapToCellsByCatType = curry((names, rows, namesToRowIndex, catType) => {
   return pipe(
-    map(pipe(
+    addIndex(map)((c, i) => pipe(
       viewRowIndexArrayFromName(namesToRowIndex),
       ifElse(
         isNilOrEmpty,
-        renderCell,
+        renderCell(i),
         pipe(
           map(viewByIndex(rows)),
-          renderCell,
+          renderCell(i),
         ),
       ),
-    )),
+    )(c)),
     prepend(CapitalizedHeader(catType)),
     RowWithKey(catType),
   )(names);
 });
 
-const renderCell = rows => <td>
-  {rows && rows.map(renderRow)}
-</td>;
+const renderCell = index => {
+  return ifElse(
+    isNilOrEmpty,
+    always(Cell(index, '')),
+    pipe(
+      addIndex(map)((c, i) => renderRow(`${index} ${i}`)(c)),
+      Cell(index),
+    ),
+  );
+};
 
-const renderRow = pipe(
+const renderRow = key => pipe(
   mapRowToStringWithFallback,
-  c => <div>{c}</div>,
+  c => <div key={key}>{c}</div>,
 );
 
 const makeRows = curry((catTypes, names, rows, catToNameToRowIndex) => {

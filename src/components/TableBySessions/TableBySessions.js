@@ -3,7 +3,6 @@ import {
   apply,
   compose,
   converge,
-  curry,
   find,
   head,
   juxt,
@@ -34,7 +33,7 @@ import {
   worship,
 } from "../../libs/karios-pdf-parser/categories/category-types";
 import {isNilOrEmpty} from "../../libs/karios-pdf-parser/utils";
-import {CapitalizedHeader, RowWithKey, TwoFragments} from "../../utils/ui-utils";
+import {CapitalizedHeader, Cell, RowWithKey, TwoFragments} from "../../utils/ui-utils";
 
 const sortedCategories = [
   worship,
@@ -81,7 +80,6 @@ const Session = (session) => <>
   <td>{pipe(view(sessionTimeLens), formatSessionDateStr)(session)}</td>
 </>;
 
-const Cell = curry((key, text) => <td key={key}>{text}</td>);
 const TimeDurationCell = pipe(formatStartEndTimeStr, Cell('duration'));
 
 const findRowWithCategory = c => find(pathEq(['category', 'category'], c));

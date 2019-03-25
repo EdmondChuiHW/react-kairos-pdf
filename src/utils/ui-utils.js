@@ -12,3 +12,4 @@ export const CapitalizedHeader = pipe(
 );
 
 export const TwoFragments = curry((a, b) => <>{a}{b}</>);
+export const Cell = curry((key, text) => <td key={key}>{text}</td>);

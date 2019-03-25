@@ -1,6 +1,7 @@
 import {handleRow} from "./handle-row";
 import moment from "moment";
 import {ParsingErrors} from "../errors";
+import {chapterReview} from "../categories/category-types";
 
 describe('handleRow(…)', function () {
 
@@ -11,7 +12,7 @@ describe('handleRow(…)', function () {
     expect(actual.declaredDuration.asMilliseconds()).toEqual(moment.duration(15, 'minutes').asMilliseconds());
     expect(actual.facilitator).toEqual("Flavius Mui");
     expect(actual.startTime.isValid()).toEqual(true);
-    expect(actual.category.category).toEqual('chapter-review');
+    expect(actual.category.category).toEqual(chapterReview);
     expect(actual.category.number).toEqual(1);
     expect(actual.errors).toEqual([]);
   });
@@ -25,7 +26,7 @@ describe('handleRow(…)', function () {
     expect(actual.declaredDuration.asMilliseconds()).toEqual(moment.duration(15, 'minutes').asMilliseconds());
     expect(actual.facilitator).toEqual("Flavius Mui");
     expect(actual.startTime.isValid()).toEqual(true);
-    expect(actual.category.category).toEqual('chapter-review');
+    expect(actual.category.category).toEqual(chapterReview);
     expect(actual.category.number).toEqual(1);
     expect(actual.errors).toEqual([
       ParsingErrors.ofMismatchedDurations(`${15} | ${activityTexts}`, actual.declaredDuration, moment.duration(12, 'minutes')),
@@ -41,7 +42,7 @@ describe('handleRow(…)', function () {
     expect(actual.declaredDuration.asMilliseconds()).toEqual(moment.duration(15, 'minutes').asMilliseconds());
     expect(actual.facilitator).toEqual("Flavius Mui");
     expect(actual.startTime.isValid()).toEqual(true);
-    expect(actual.category.category).toEqual('chapter-review');
+    expect(actual.category.category).toEqual(chapterReview);
     expect(actual.category.number).toEqual(1);
     expect(actual.errors).toEqual([]);
   });
@@ -55,7 +56,7 @@ describe('handleRow(…)', function () {
     expect(actual.declaredDuration.isValid()).toEqual(false);
     expect(actual.facilitator).toEqual("Flavius Mui");
     expect(actual.startTime.isValid()).toEqual(true);
-    expect(actual.category.category).toEqual('chapter-review');
+    expect(actual.category.category).toEqual(chapterReview);
     expect(actual.category.number).toEqual(1);
     expect(actual.errors).toEqual([
       ParsingErrors.ofMismatchedDurations(`${NaN} | ${activityTexts}`, actual.declaredDuration, moment.duration(12, 'minutes')),

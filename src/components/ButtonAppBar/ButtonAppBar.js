@@ -1,17 +1,11 @@
 // Feb 18 2019 https://material-ui.com/demos/app-bar/
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import LanguageIcon from '@material-ui/icons/Language';
-import DownloadIcon from '@material-ui/icons/CloudDownload';
 import {useTranslation} from "react-i18next";
-import {TableExport} from "tableexport";
 
 const styles = {
   grow: {
@@ -25,29 +19,7 @@ const styles = {
 
 function ButtonAppBar(props) {
   const {classes} = props;
-  const {t, i18n} = useTranslation();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [lanCode, setLanCode] = useState(i18n.language);
-
-  useEffect(() => {
-    i18n.changeLanguage(lanCode);
-  }, [lanCode]);
-
-  const closeMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const onMenuItemClick = lng => {
-    closeMenu();
-    setLanCode(lng);
-  };
-
-  const onDownloadButtonClick = () => {
-    new TableExport(document.getElementsByTagName("table"), {
-      bootstrap: true,
-      trimWhitespace: false,
-    });
-  };
+  const [t] = useTranslation();
 
   return (
     <div>
@@ -56,40 +28,6 @@ function ButtonAppBar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             {t('title')}
           </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="Download"
-            onClick={onDownloadButtonClick}
-          >
-            <DownloadIcon/>
-          </IconButton>
-          <IconButton
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="Languages"
-            aria-owns={!!anchorEl ? 'long-menu' : undefined}
-            aria-haspopup="true"
-            onClick={e => setAnchorEl(e.currentTarget)}
-          >
-            <LanguageIcon/>
-          </IconButton>
-          <Menu
-            id="long-menu"
-            anchorEl={anchorEl}
-            open={!!anchorEl}
-            onClose={() => closeMenu()}
-          >
-            {
-              t('supportedLanguages', {returnObjects: true}).map(lan => {
-                return <MenuItem
-                  onClick={() => onMenuItemClick(lan.code)}
-                  selected={lan.code === lanCode}
-                  key={lan.code}>
-                  {lan.display}
-                </MenuItem>
-              })
-            }
-          </Menu>
         </Toolbar>
       </AppBar>
     </div>

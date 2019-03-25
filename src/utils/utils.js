@@ -1,4 +1,29 @@
-import {always, cond, dropLast, filter, head, join, pathEq, pipe, prop, propEq, props, split, T} from "ramda";
+import {
+  addIndex,
+  always,
+  assoc,
+  compose,
+  concat,
+  cond,
+  curry,
+  dropLast,
+  filter,
+  head,
+  join,
+  map,
+  mergeDeepWith,
+  path,
+  pathEq,
+  pipe,
+  prop,
+  propEq,
+  props,
+  split,
+  T,
+  transduce,
+  unless,
+  when,
+} from "ramda";
 import {
   chapterIntro,
   chapterReview,
@@ -8,7 +33,7 @@ import {
   video,
   worship,
 } from "../libs/karios-pdf-parser/categories/category-types";
-import {stripAllQuotes} from "../libs/karios-pdf-parser/utils";
+import {isNilOrEmpty, stripAllQuotes} from "../libs/karios-pdf-parser/utils";
 
 export function pushToArrayAtKey(obj, key, newItem) {
   if (!obj[key]) {
@@ -24,7 +49,7 @@ export const viewTextFromCategory = cond([
   [catEq(chapterIntro), pipe(props(['number', 'topic']), join(' '))],
   [catEq(chapterReview), pipe(props(['number', 'topic']), join(' '))],
   [catEq(devotion), prop('topic')],
-  [catEq(focusPrayer), pipe(props(['prayerTarget', 'assignedGroup']), join('\n'))],
+  [catEq(focusPrayer), pipe(props(['prayerTarget', 'assignedGroup']), join('\n• '))],
   [catEq(video), prop('title')],
   [catEq(worship), prop('assignedGroup')],
   [catEq(other), always('')],
@@ -44,3 +69,30 @@ export const formatAsShortName = pipe(split(' '), dropLast(1), join(' '));
 export const formatSessionDateStr = sessionTime => sessionTime.format('MMM D (ddd)');
 export const formatRowTimeStr = rowTime => rowTime.format('h:mm');
 export const formatStartEndTimeStr = (a, b) => `${formatRowTimeStr(a)}-${formatRowTimeStr(b)}`;
+
+// => {'worship': {'Sam': [rowIndex]}}}
+const categoryWithNameFromRow = (r, i) => assoc(
+  path(['category', 'category'], r),
+  nameFromRow(r, i),
+  {},
+);
+
+// => {'Sam': [rowIndex]}
+const nameFromRow = (r, i) => assoc(path(['facilitator'], r), [i], {});
+
+const xForm = compose(
+  addIndex(map)(categoryWithNameFromRow),
+);
+
+const accFn = mergeDeepWith(concat);
+export const mapRowsToIndexByCategoryThenName = transduce(xForm, accFn, {});
+
+export const viewByIndex = curry((a, i) => a && a[i]);
+
+export const mapRowToString = fallBackTextFn => row => unless(isNilOrEmpty, pipe(
+  prop('category'),
+  viewTextFromCategory,
+  when(isNilOrEmpty, () => fallBackTextFn(row)),
+))(row);
+
+export const mapRowToStringWithFallback = mapRowToString(unless(isNilOrEmpty, fallbackTextForRow));

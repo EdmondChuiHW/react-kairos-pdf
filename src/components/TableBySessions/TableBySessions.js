@@ -15,16 +15,14 @@ import {
   prop,
   unless,
   view,
-  when,
 } from "ramda";
 import React from "react";
 import {
   collectRowsUnderSessionIndex,
-  fallbackTextForRow,
   formatAsShortName,
   formatSessionDateStr,
   formatStartEndTimeStr,
-  viewTextFromCategory,
+  mapRowToStringWithFallback,
 } from "../../utils/utils";
 import './TableBySessions.css';
 import {
@@ -36,7 +34,7 @@ import {
   worship,
 } from "../../libs/karios-pdf-parser/categories/category-types";
 import {isNilOrEmpty} from "../../libs/karios-pdf-parser/utils";
-import {CapitalizedHeader, RowWithKey} from "../../utils/ui-utils";
+import {CapitalizedHeader, RowWithKey, TwoFragments} from "../../utils/ui-utils";
 
 const sortedCategories = [
   worship,
@@ -52,7 +50,7 @@ export const TableBySessions = ({sessions, rows}) => {
     Table,
     addIndex(map)((s, sI) => compose(
       RowWithKey(sI),
-      Fragment(Session(s)),
+      TwoFragments(Session(s)),
       makeStartTimeAndCategories,
       collectRowsUnderSessionIndex(sI),
     )(rows)),
@@ -61,8 +59,6 @@ export const TableBySessions = ({sessions, rows}) => {
 
 const sessionTimeLens = lensProp('date');
 const sessionNumberLens = lensProp('sessionNumber');
-
-const Fragment = curry((a, b) => <>{a}{b}</>);
 
 const Table = children => <div className="table-by-sessions">
   <table>
@@ -92,23 +88,21 @@ const findRowWithCategory = c => find(pathEq(['category', 'category'], c));
 
 const extractShortNameFromRow = pipe(prop('facilitator'), formatAsShortName);
 
-const mapRowToString = fallBackTextFn => row => unless(isNilOrEmpty, pipe(
-  prop('category'),
-  viewTextFromCategory,
-  when(isNilOrEmpty, () => fallBackTextFn(row)),
+const mapWithShortName = row => pipe(
+  mapRowToStringWithFallback,
   unless(isNilOrEmpty, s => `${s}\n• ${extractShortNameFromRow(row)}`),
-))(row);
+)(row);
 
 const Categories = rows => addIndex(map)((c, i) =>
   pipe(
     findRowWithCategory(c),
-    mapRowToString(unless(isNilOrEmpty, fallbackTextForRow)),
+    mapWithShortName,
     Cell(i),
   )(rows),
 )(sortedCategories);
 
 const makeStartTimeAndCategories = converge(
-  Fragment, [
+  TwoFragments, [
     pipe(juxt([head, last]), map(prop('startTime')), apply(TimeDurationCell)),
     Categories,
   ],

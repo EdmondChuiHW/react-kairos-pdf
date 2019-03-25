@@ -10,3 +10,5 @@ export const CapitalizedHeader = pipe(
   capitalize,
   Header,
 );
+
+export const TwoFragments = curry((a, b) => <>{a}{b}</>);

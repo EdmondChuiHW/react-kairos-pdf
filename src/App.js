@@ -5,6 +5,7 @@ import ButtonAppBar from "./components/ButtonAppBar/ButtonAppBar";
 import {PdfFilePicker} from "./components/PdfFilePicker/PdfFilePicker";
 import {Loading} from "./components/Loading/Loading";
 import {TableByCategories} from "./components/TableByCategories/TableByCategories";
+import {TableBySessions} from "./components/TableBySessions/TableBySessions";
 
 export function App() {
   const [result, setResult] = useState(null);
@@ -22,7 +23,7 @@ export function App() {
         {!!result
           ? <>
             <TableByCategories {...result}/>
-            {/*<TableBySessions {...result}/>*/}
+            <TableBySessions {...result}/>
             {/*{*/}
             {/*result.sessions.map((session, sessionIndex) => {*/}
             {/*const rows = filter(propEq('sessionIndex', sessionIndex), result.rows);*/}

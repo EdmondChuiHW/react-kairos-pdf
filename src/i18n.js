@@ -9,7 +9,7 @@ import {always, ifElse, includes} from "ramda";
 // have a look at the Quick start guide 
 // for passing in lng and translations on init
 
-const isHrefOnGithub = includes('/react-karios-pdf/');
+const isHrefOnGithub = includes('github.io');
 const resolveLoadPathFromHref = ifElse(
   isHrefOnGithub,
   always('/react-karios-pdf/locales/{{lng}}/{{ns}}.json'),

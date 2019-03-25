@@ -31,7 +31,6 @@ const sortedCategories = [
 export const TableByCategories = ({rows, sessions, facilitators}) => {
   const catToNameToRowIndex = useMemo(() => mapRowsToIndexByCategoryThenName(rows), [rows]);
   const names = useMemo(() => sortBy(identity, facilitators), [facilitators]);
-  console.log(catToNameToRowIndex);
   return pipe(
     makeRows(sortedCategories, names, rows),
     makeTable(names),

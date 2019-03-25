@@ -18,6 +18,7 @@ import {
   prop,
   propEq,
   props,
+  replace,
   split,
   T,
   transduce,
@@ -49,7 +50,7 @@ export const viewTextFromCategory = cond([
   [catEq(chapterIntro), pipe(props(['number', 'topic']), join(' '))],
   [catEq(chapterReview), pipe(props(['number', 'topic']), join(' '))],
   [catEq(devotion), prop('topic')],
-  [catEq(focusPrayer), pipe(props(['prayerTarget', 'assignedGroup']), join('\n• '))],
+  [catEq(focusPrayer), pipe(props(['prayerTarget', 'assignedGroup']), join('\n- '))],
   [catEq(video), prop('title')],
   [catEq(worship), prop('assignedGroup')],
   [catEq(other), always('')],
@@ -60,7 +61,7 @@ const rowCatEq = pathEq(['category', 'category']);
 
 export const fallbackTextForRow = cond([
   [rowCatEq(video), pipe(prop('activityTexts'), head, stripAllQuotes)],
-  [T, pipe(prop('activityTexts'), join('\n'))],
+  [T, pipe(prop('activityTexts'), join(excelLinefeed))],
 ]);
 
 export const collectRowsUnderSessionIndex = sI => filter(propEq('sessionIndex', sI));
@@ -93,6 +94,10 @@ export const mapRowToString = fallBackTextFn => row => unless(isNilOrEmpty, pipe
   prop('category'),
   viewTextFromCategory,
   when(isNilOrEmpty, () => fallBackTextFn(row)),
+  replaceWithExcelLineFeed,
 ))(row);
 
 export const mapRowToStringWithFallback = mapRowToString(unless(isNilOrEmpty, fallbackTextForRow));
+
+export const excelLinefeed = '\r\n';
+export const replaceWithExcelLineFeed = replace(/\r?\n/g, excelLinefeed);

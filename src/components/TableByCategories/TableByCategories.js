@@ -1,8 +1,9 @@
 import {addIndex, always, apply, curry, flip, identity, ifElse, juxt, map, pipe, prepend, prop, sortBy} from "ramda";
-import {CapitalizedHeader, Cell, RowWithKey} from "../../utils/ui-utils";
+import {CapitalizedHeader, Cell, Header, RowWithKey} from "../../utils/ui-utils";
 import React, {useMemo} from "react";
 import "./TableByCategories.css";
 import {
+  excelLinefeed,
   formatAsShortName,
   mapRowsToIndexByCategoryThenName,
   mapRowToStringWithFallback,
@@ -43,7 +44,7 @@ const makeTable = curry((names, children) =>
       <thead>
       <tr>
         <th/>
-        {map(pipe(formatAsShortName, CapitalizedHeader))(names)}
+        {map(pipe(formatAsShortName, Header))(names)}
       </tr>
       </thead>
       <tbody>
@@ -91,7 +92,7 @@ const renderCell = index => {
 
 const renderRow = key => pipe(
   mapRowToStringWithFallback,
-  c => <div key={key}>{c}</div>,
+  c => <span key={key}>{c + excelLinefeed}<br/></span>,
 );
 
 const makeRows = curry((catTypes, names, rows, catToNameToRowIndex) => {

@@ -5,7 +5,6 @@ import {
   converge,
   filter,
   head,
-  join,
   juxt,
   last,
   lensProp,
@@ -19,6 +18,7 @@ import {
 import React from "react";
 import {
   collectRowsUnderSessionIndex,
+  excelLinefeed,
   formatAsShortName,
   formatSessionDateStr,
   formatStartEndTimeStr,
@@ -34,7 +34,7 @@ import {
   worship,
 } from "../../libs/karios-pdf-parser/categories/category-types";
 import {isNilOrEmpty} from "../../libs/karios-pdf-parser/utils";
-import {CapitalizedHeader, Cell, RowWithKey, TwoFragments} from "../../utils/ui-utils";
+import {CapitalizedHeader, Cell, replaceLineBreakWithBr, RowWithKey, TwoFragments} from "../../utils/ui-utils";
 
 const sortedCategories = [
   worship,
@@ -89,14 +89,16 @@ const extractShortNameFromRow = pipe(prop('facilitator'), formatAsShortName);
 
 const mapWithShortName = row => pipe(
   mapRowToStringWithFallback,
-  unless(isNilOrEmpty, s => `${s}\n• ${extractShortNameFromRow(row)}`),
+  unless(isNilOrEmpty, pipe(
+    s => `${s}${excelLinefeed}- ${extractShortNameFromRow(row)}`,
+    replaceLineBreakWithBr,
+  )),
 )(row);
 
 const Categories = rows => addIndex(map)((c, i) =>
   pipe(
     findRowsWithCategory(c),
     map(mapWithShortName),
-    join('\n'),
     Cell(i),
   )(rows),
 )(sortedCategories);

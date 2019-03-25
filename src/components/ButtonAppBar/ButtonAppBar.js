@@ -9,7 +9,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import LanguageIcon from '@material-ui/icons/Language';
+import DownloadIcon from '@material-ui/icons/CloudDownload';
 import {useTranslation} from "react-i18next";
+import {TableExport} from "tableexport";
 
 const styles = {
   grow: {
@@ -40,6 +42,13 @@ function ButtonAppBar(props) {
     setLanCode(lng);
   };
 
+  const onDownloadButtonClick = () => {
+    new TableExport(document.getElementsByTagName("table"), {
+      bootstrap: true,
+      trimWhitespace: false,
+    });
+  };
+
   return (
     <div>
       <AppBar position="static">
@@ -47,6 +56,13 @@ function ButtonAppBar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             {t('title')}
           </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="Download"
+            onClick={onDownloadButtonClick}
+          >
+            <DownloadIcon/>
+          </IconButton>
           <IconButton
             className={classes.menuButton}
             color="inherit"

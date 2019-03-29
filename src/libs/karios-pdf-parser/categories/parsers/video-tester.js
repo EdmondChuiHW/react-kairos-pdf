@@ -8,7 +8,7 @@ const removeTrailingParenthesisAndContents = s => s.replace(/\s*\(.*\)\s*$/, '')
 
 export const videoTester = any(both(
   test(/^(?:\(changed?\sto\)\s+)?(?:video\s*-*\s*.*)/i),
-  test(/^((?!contextualized).)*$/i),
+  test(/^((?!contextuali[zs]ed).)*$/i),
 ));
 const videoTitleMatcher = match(/^(?:\(changed?\sto\)\s+)?(?:video\s*-*\s*(.*))/i);
 

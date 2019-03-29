@@ -14,6 +14,7 @@ describe('videoTester', () => {
 
   it('should return false for non-matches', () => {
     expect(videoTester(['Video of Contextualized Worship'])).toEqual(false);
+    expect(videoTester(['Video of Contextualised Worship'])).toEqual(false);
     expect(videoTester(['Contextualised Worship Service'])).toEqual(false);
     expect(videoTester(['Introduction to Course'])).toEqual(false);
   });

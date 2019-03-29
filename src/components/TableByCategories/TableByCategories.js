@@ -2,21 +2,21 @@ import {
   addIndex,
   always,
   apply,
-  both,
+  cond,
   curry,
-  either,
-  equals,
+  F,
   flip,
   gt,
   identity,
   ifElse,
   juxt,
   map,
-  path,
+  pathEq,
   pipe,
   prepend,
   prop,
-  sortBy
+  sortBy,
+  T,
 } from "ramda";
 import {CapitalizedHeader, Cell, Header, RowWithKey} from "../../utils/ui-utils";
 import React, {useMemo} from "react";
@@ -49,7 +49,7 @@ const sortedCategories = [
   meeting,
 ];
 
-export const TableByCategories = ({rows, sessions, facilitators}) => {
+export const TableByCategories = ({rows, facilitators}) => {
   const catToNameToRowIndex = useMemo(() => mapRowsToIndexByCategoryThenName(rows), [rows]);
   const names = useMemo(() => sortBy(identity, facilitators), [facilitators]);
   return pipe(
@@ -103,15 +103,15 @@ const mapToCellsByCatType = curry((names, rows, namesToRowIndex, catType) => {
   )(names);
 });
 
+const rowCategoryEq = pathEq(['category', 'category']);
+
 const isRowIndexNextWorshipOrFocusPrayer = curry((rows, i) => pipe(
   viewByIndex(rows),
-  both(
-    pipe(prop('sessionIndex'), flip(gt)(0)),
-    pipe(
-      path(['category', 'category']),
-      either(equals(worship), equals(focusPrayer)),
-    ),
-  ),
+  cond([
+    [rowCategoryEq(worship), pipe(prop('sessionIndex'), flip(gt)(0))],
+    [rowCategoryEq(focusPrayer), pipe(prop('sessionIndex'), flip(gt)(1))],
+    [T, F],
+  ]),
 )(i));
 
 const renderCell = index => {

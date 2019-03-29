@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/react-karios-pdf/precache-manifest.e44b68b25f3a46ba352581d30aad4f68.js"
+  "/react-karios-pdf/precache-manifest.3d90bde321b34632ffe50eae91fc585d.js"
 );
 
 workbox.clientsClaim();

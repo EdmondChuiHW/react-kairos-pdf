@@ -24,6 +24,7 @@ import "./TableByCategories.css";
 import {
   excelLinefeed,
   formatAsShortName,
+  mapCatTypeToDisplayStr,
   mapRowsToIndexByCategoryThenName,
   mapRowToStringWithFallback,
   viewByIndex,
@@ -40,13 +41,13 @@ import {
 import {isNilOrEmpty} from "../../libs/karios-pdf-parser/utils";
 
 const sortedCategories = [
-  worship,
   devotion,
-  focusPrayer,
   chapterReview,
   chapterIntro,
   video,
   meeting,
+  worship,
+  focusPrayer,
 ];
 
 export const TableByCategories = ({rows, facilitators}) => {
@@ -98,7 +99,7 @@ const mapToCellsByCatType = curry((names, rows, namesToRowIndex, catType) => {
         ),
       ),
     )(c)),
-    prepend(CapitalizedHeader(catType)),
+    prepend(CapitalizedHeader(mapCatTypeToDisplayStr(catType))),
     RowWithKey(catType),
   )(names);
 });

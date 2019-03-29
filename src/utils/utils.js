@@ -7,8 +7,10 @@ import {
   cond,
   curry,
   dropLast,
+  equals,
   filter,
   head,
+  identity,
   inc,
   join,
   map,
@@ -61,6 +63,12 @@ export const fallbackTextForRow = cond([
   [rowCatEq(video), pipe(prop('activityTexts'), head, stripAllQuotes)],
   [rowCatEq(meeting), pipe(prop('sessionIndex'), inc, toString, s => `Session ${s}`)],
   [T, pipe(prop('activityTexts'), join(excelLinefeed))],
+]);
+
+export const mapCatTypeToDisplayStr = cond([
+  [equals(worship), always('1st worship')],
+  [equals(focusPrayer), always('1st focus prayer')],
+  [T, identity],
 ]);
 
 export const collectRowsUnderSessionIndex = sI => filter(propEq('sessionIndex', sI));

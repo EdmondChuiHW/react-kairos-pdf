@@ -16,8 +16,7 @@ import {
   pipe,
   prepend,
   prop,
-  sortBy,
-  tap
+  sortBy
 } from "ramda";
 import {CapitalizedHeader, Cell, Header, RowWithKey} from "../../utils/ui-utils";
 import React, {useMemo} from "react";
@@ -95,7 +94,6 @@ const mapToCellsByCatType = curry((names, rows, namesToRowIndex, catType) => {
             always([]),
             viewByIndex(rows),
           )),
-          tap(console.error),
           renderCell(i),
         ),
       ),

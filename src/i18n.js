@@ -12,7 +12,7 @@ import {always, ifElse, includes} from "ramda";
 const isHrefOnGithub = includes('github.io');
 const resolveLoadPathFromHref = ifElse(
   isHrefOnGithub,
-  always('/react-karios-pdf/locales/{{lng}}/{{ns}}.json'),
+  always('/react-kairos-pdf/locales/{{lng}}/{{ns}}.json'),
   always('/locales/{{lng}}/{{ns}}.json'),
 );
 

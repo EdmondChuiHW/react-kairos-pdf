@@ -20,15 +20,15 @@ self.__precacheManifest = [
     "url": "/react-karios-pdf/static/js/runtime~main.03f7d144.js"
   },
   {
-    "revision": "498bed9fddc44013dc2d",
-    "url": "/react-karios-pdf/static/js/main.498bed9f.chunk.js"
+    "revision": "9cf7cdcbe2e003962a5d",
+    "url": "/react-karios-pdf/static/js/main.9cf7cdcb.chunk.js"
   },
   {
     "revision": "8845461a823914305fad",
     "url": "/react-karios-pdf/static/js/2.8845461a.chunk.js"
   },
   {
-    "revision": "498bed9fddc44013dc2d",
+    "revision": "9cf7cdcbe2e003962a5d",
     "url": "/react-karios-pdf/static/css/main.c43d0527.chunk.css"
   },
   {
@@ -36,7 +36,7 @@ self.__precacheManifest = [
     "url": "/react-karios-pdf/static/css/2.92e651cc.chunk.css"
   },
   {
-    "revision": "0a8a5b18f356e8a10258d6d8f7c9e7f4",
+    "revision": "7f8d4c1ee7f74835316e2d311f814b96",
     "url": "/react-karios-pdf/index.html"
   }
 ];

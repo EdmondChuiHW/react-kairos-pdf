@@ -1,5 +1,5 @@
 import {guessCategoryFromRawStrings} from "./guess-category";
-import {chapterIntro, chapterReview, devotion, focusPrayer, other, video, worship} from "./category-types";
+import {chapterIntro, chapterReview, devotion, focusPrayer, meeting, other, video, worship} from "./category-types";
 
 describe('guessCategoryFromRawStrings', () => {
   it('should guess correct category', () => {
@@ -10,6 +10,7 @@ describe('guessCategoryFromRawStrings', () => {
     expect(g([`9:00`, `LRP Prayer Focus - Buddhist`, 'FT Team']).category).toEqual(focusPrayer);
     expect(g([`9:00`, `Video "The Ends of the Earth" (20 min)`]).category).toEqual(video);
     expect(g([`9:00`, `Worship & Prayer`, 'FT Team']).category).toEqual(worship);
+    expect(g([`9:00`, `Facilitators: Lunch, Meeting and marking WS`]).category).toEqual(meeting);
     expect(g([`9:00`, `Introduction to course`]).category).toEqual(other);
   });
 });

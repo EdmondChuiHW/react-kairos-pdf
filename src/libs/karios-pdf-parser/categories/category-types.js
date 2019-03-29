@@ -4,6 +4,7 @@ export const devotion = 'devotion';
 export const focusPrayer = 'focus-prayer';
 export const video = 'video';
 export const worship = 'worship';
+export const meeting = 'meeting';
 export const other = 'other';
 
 export const knownCategoryTypes = [
@@ -13,5 +14,6 @@ export const knownCategoryTypes = [
   focusPrayer,
   video,
   worship,
+  meeting,
   other,
 ];

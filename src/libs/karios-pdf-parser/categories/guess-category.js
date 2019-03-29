@@ -6,6 +6,7 @@ import {chapterReviewParser, chapterReviewTester} from "./parsers/chapter-review
 import {chapterIntroParser, chapterIntroTester} from "./parsers/chapter-intro-tester";
 import {videoParser, videoTester} from "./parsers/video-tester";
 import {other} from "./category-types";
+import {meetingParser, meetingTester} from "./parsers/meeting-tester";
 
 export const guessCategoryFromRawStrings = cond([
   [worshipTester, worshipParser],
@@ -14,5 +15,6 @@ export const guessCategoryFromRawStrings = cond([
   [chapterReviewTester, chapterReviewParser],
   [chapterIntroTester, chapterIntroParser],
   [videoTester, videoParser],
+  [meetingTester, meetingParser],
   [T, always({category: other})],
 ]);

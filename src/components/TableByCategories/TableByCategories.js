@@ -1,4 +1,24 @@
-import {addIndex, always, apply, curry, flip, identity, ifElse, juxt, map, pipe, prepend, prop, sortBy} from "ramda";
+import {
+  addIndex,
+  always,
+  apply,
+  both,
+  curry,
+  either,
+  equals,
+  flip,
+  gt,
+  identity,
+  ifElse,
+  juxt,
+  map,
+  path,
+  pipe,
+  prepend,
+  prop,
+  sortBy,
+  tap
+} from "ramda";
 import {CapitalizedHeader, Cell, Header, RowWithKey} from "../../utils/ui-utils";
 import React, {useMemo} from "react";
 import "./TableByCategories.css";
@@ -70,7 +90,12 @@ const mapToCellsByCatType = curry((names, rows, namesToRowIndex, catType) => {
         isNilOrEmpty,
         renderCell(i),
         pipe(
-          map(viewByIndex(rows)),
+          map(ifElse(
+            isRowIndexNextWorshipOrFocusPrayer(rows),
+            always([]),
+            viewByIndex(rows),
+          )),
+          tap(console.error),
           renderCell(i),
         ),
       ),
@@ -79,6 +104,17 @@ const mapToCellsByCatType = curry((names, rows, namesToRowIndex, catType) => {
     RowWithKey(catType),
   )(names);
 });
+
+const isRowIndexNextWorshipOrFocusPrayer = curry((rows, i) => pipe(
+  viewByIndex(rows),
+  both(
+    pipe(prop('sessionIndex'), flip(gt)(0)),
+    pipe(
+      path(['category', 'category']),
+      either(equals(worship), equals(focusPrayer)),
+    ),
+  ),
+)(i));
 
 const renderCell = index => {
   return ifElse(

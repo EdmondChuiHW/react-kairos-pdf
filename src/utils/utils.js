@@ -52,7 +52,7 @@ export const viewTextFromCategory = cond([
   [catEq(chapterIntro), pipe(props(['number', 'topic']), join(' '))],
   [catEq(chapterReview), pipe(props(['number', 'topic']), join(' '))],
   [catEq(devotion), prop('topic')],
-  [catEq(focusPrayer), pipe(props(['prayerTarget', 'assignedGroup']), join('\n- '))],
+  [catEq(focusPrayer), pipe(props(['prayerTarget', 'assignedGroup']), join(`${excelLinefeed}- `))],
   [catEq(video), prop('title')],
   [catEq(worship), prop('assignedGroup')],
   [catEq(other), always('')],

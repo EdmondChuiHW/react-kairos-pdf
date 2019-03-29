@@ -1,7 +1,7 @@
 {
   "name": "react-karios-pdf",
   "version": "0.1.0",
-  "homepage": "https://chuihinwai.github.io/react-karios-pdf/",
+  "homepage": "https://chuihinwai.github.io/react-kairos-pdf/",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.2",

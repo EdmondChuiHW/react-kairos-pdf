@@ -56,6 +56,24 @@ export const oldHandlePage = curry((handleSession, textContent) => {
     });
   };
 
+  const flushPendingRowInput = () => {
+    if (pendingRowInput && pendingRowInput.length) {
+      const r = handleRow(pendingRowInput);
+      r.sessionIndex = last(sessions).sessionNumber - 1;
+      rows[currentRowIndex] = r;
+      if (r.facilitator && r.facilitator.toLocaleLowerCase() === 'all') {
+        allFacilitatorsRows.push(currentRowIndex);
+        pushIndexToAllExistingFacilitators(currentRowIndex);
+      } else {
+        if (!facilitatorToRows[r.facilitator]) {
+          facilitatorToRows[r.facilitator] = allFacilitatorsRows.slice();
+        }
+        facilitatorToRows[r.facilitator].push(currentRowIndex);
+      }
+    }
+    pendingRowInput = [];
+  };
+
   let hasStartedParsingRows = false;
 
   let allTextsIndex = 0;
@@ -63,27 +81,14 @@ export const oldHandlePage = curry((handleSession, textContent) => {
   while (allTextsIndex < textContent.items.length) {
     const item = textContent.items[allTextsIndex];
     if (item.str.startsWith('Session ')) {
+      flushPendingRowInput();
       const s = handleSession(item.str);
       sessions.push(s);
       hasStartedParsingRows = false;
 
     } else {
       if (isStrStartTime(item.str)) {
-        if (pendingRowInput && pendingRowInput.length) {
-          const r = handleRow(pendingRowInput);
-          r.sessionIndex = last(sessions).sessionNumber - 1;
-          rows[currentRowIndex] = r;
-          if (r.facilitator && r.facilitator.toLocaleLowerCase() === 'all') {
-            allFacilitatorsRows.push(currentRowIndex);
-            pushIndexToAllExistingFacilitators(currentRowIndex);
-          } else {
-            if (!facilitatorToRows[r.facilitator]) {
-              facilitatorToRows[r.facilitator] = allFacilitatorsRows.slice();
-            }
-            facilitatorToRows[r.facilitator].push(currentRowIndex);
-          }
-        }
-        pendingRowInput = [];
+        flushPendingRowInput();
         currentRowIndex += 1;
         hasStartedParsingRows = true;
       }
@@ -96,6 +101,7 @@ export const oldHandlePage = curry((handleSession, textContent) => {
 
     allTextsIndex += 1;
   }
+  flushPendingRowInput();
   return {
     sessions,
     rows,

@@ -1,4 +1,4 @@
-import {always, any, complement, findLast, match, pipe, reduce, test, unless, when} from "ramda";
+import {always, any, both, complement, findLast, match, pipe, reduce, test, unless, when} from "ramda";
 import {isNilOrEmpty, stripAllQuotes, throwErrorWithMessage} from "../../utils";
 import {video} from "../category-types";
 
@@ -6,7 +6,10 @@ const makeVideo = (title) => ({category: video, title});
 
 const removeTrailingParenthesisAndContents = s => s.replace(/\s*\(.*\)\s*$/, '');
 
-export const videoTester = any(test(/^(?:\(changed?\sto\)\s+)?(?:video\s*-*\s*.*)/i));
+export const videoTester = any(both(
+  test(/^(?:\(changed?\sto\)\s+)?(?:video\s*-*\s*.*)/i),
+  test(/^((?!contextualized).)*$/i),
+));
 const videoTitleMatcher = match(/^(?:\(changed?\sto\)\s+)?(?:video\s*-*\s*(.*))/i);
 
 const titleReducer = (acc, curr) => pipe(

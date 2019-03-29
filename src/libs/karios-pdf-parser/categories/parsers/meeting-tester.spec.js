@@ -4,6 +4,7 @@ import {meetingParser, meetingTester} from "./meeting-tester";
 describe('meetingTester', () => {
   it('should return true for matches', () => {
     expect(meetingTester(['Facilitator meeting'])).toEqual(true);
+    expect(meetingTester(['Participants: Lunch and WS', 'Facilitators: Lunch, Meeting and WS marking'])).toEqual(true);
     expect(meetingTester(['FT meeting'])).toEqual(true);
   });
 
@@ -16,6 +17,7 @@ describe('meetingTester', () => {
 describe('meetingParser', () => {
   it('should return meeting object for matches', () => {
     expect(meetingParser(['Facilitator meeting']).category).toEqual(meeting);
+    expect(meetingParser(['Participants: Lunch and WS', 'Facilitators: Lunch, Meeting and WS marking']).category).toEqual(meeting);
     expect(meetingParser(['FT meeting']).category).toEqual(meeting);
   });
 

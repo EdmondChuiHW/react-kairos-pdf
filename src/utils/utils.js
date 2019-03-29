@@ -9,6 +9,7 @@ import {
   dropLast,
   filter,
   head,
+  inc,
   join,
   map,
   mergeDeepWith,
@@ -21,6 +22,7 @@ import {
   replace,
   split,
   T,
+  toString,
   transduce,
   unless,
   when,
@@ -30,6 +32,7 @@ import {
   chapterReview,
   devotion,
   focusPrayer,
+  meeting,
   other,
   video,
   worship,
@@ -38,13 +41,6 @@ import {isNilOrEmpty, stripAllQuotes} from "../libs/karios-pdf-parser/utils";
 
 export const excelLinefeed = '\r\n';
 export const replaceWithExcelLineFeed = replace(/\r?\n/g, excelLinefeed);
-
-export function pushToArrayAtKey(obj, key, newItem) {
-  if (!obj[key]) {
-    obj[key] = [];
-  }
-  obj[key].push(newItem);
-}
 
 const catEq = propEq('category');
 
@@ -63,6 +59,7 @@ const rowCatEq = pathEq(['category', 'category']);
 
 export const fallbackTextForRow = cond([
   [rowCatEq(video), pipe(prop('activityTexts'), head, stripAllQuotes)],
+  [rowCatEq(meeting), pipe(prop('sessionIndex'), inc, toString, s => `Session ${s}`)],
   [T, pipe(prop('activityTexts'), join(excelLinefeed))],
 ]);
 

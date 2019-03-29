@@ -14,6 +14,7 @@ import {
   chapterReview,
   devotion,
   focusPrayer,
+  meeting,
   video,
   worship,
 } from "../../libs/karios-pdf-parser/categories/category-types";
@@ -26,6 +27,7 @@ const sortedCategories = [
   chapterReview,
   chapterIntro,
   video,
+  meeting,
 ];
 
 export const TableByCategories = ({rows, sessions, facilitators}) => {
